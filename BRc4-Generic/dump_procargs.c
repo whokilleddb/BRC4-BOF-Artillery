@@ -55,7 +55,7 @@ void coffee(char* argv[], int argc,  WCHAR** dispatch) {
 
     cleanUp:
         if (commandLineBuffer) {
-            BadgerFree((PVOID*)commandLineBuffer);
+            BadgerFree((PVOID*)&commandLineBuffer);
         }
         if (hProcess) {
             KERNEL32$CloseHandle(hProcess);
