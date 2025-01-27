@@ -25,7 +25,7 @@ void coffee(char* argv[], int argc, WCHAR** dispatch) {
     VS_FIXEDFILEINFO* fileInfo;
     pid = BadgerAtoi(argv[0]);
 
-    if(pid == 0) {
+    if (pid == 0) {
         BadgerDispatch(dispatch, "[-] Invalid process ID with error: %lu\n", Kernel32$GetLastError());
         return;
     }
@@ -38,8 +38,7 @@ void coffee(char* argv[], int argc, WCHAR** dispatch) {
     if (Kernel32$Module32First(snapshot, &moduleEntry)) {
         do {
             if (moduleEntry.th32ProcessID == pid) {
-                BadgerDispatch(dispatch, "[*] Name: %s\n", moduleEntry.szModule);
-                BadgerDispatch(dispatch, "[*] File Path: %s\n", moduleEntry.szExePath);
+                BadgerDispatch(dispatch, "[*] Name: %s\n [*] File Path: %s\n", moduleEntry.szModule, moduleEntry.szExePath);
                 DWORD dwHandle;
                 DWORD dwSize = Version$GetFileVersionInfoSizeA(moduleEntry.szExePath, &dwHandle);
                 if (dwSize > 0) {
