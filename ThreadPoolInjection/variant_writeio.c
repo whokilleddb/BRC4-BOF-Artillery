@@ -31,7 +31,7 @@ HANDLE HijackProcessHandle(HANDLE hProcess) {
                 pObjectTypeInformation = BadgerAlloc(objectLen);
                 if (pObjectTypeInformation) {
                     if (Ntdll$NtQueryObject(hDuplicatedObject, ObjectTypeInformation, pObjectTypeInformation, objectLen, &objectLen) == 0) {
-                        if (Msvcrt$wcscmp(L"IoCompletion", pObjectTypeInformation->TypeName.Buffer) == 0) {
+                        if (BadgerWcscmp(L"IoCompletion", pObjectTypeInformation->TypeName.Buffer) == 0) {
                             BadgerFree((PVOID*)&pObjectTypeInformation);
                             goto cleanUp;
                         }

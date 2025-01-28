@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 #include <stdint.h>
 #include <time.h>
 #include "badger_exports.h"
@@ -645,6 +646,17 @@ typedef enum _FILE_INFORMATION_CLASS
     FileMaximumInformation
 } FILE_INFORMATION_CLASS, * PFILE_INFORMATION_CLASS;
 
+#ifndef InitializeObjectAttributes
+ #define InitializeObjectAttributes(p,n,a,r,s) { \
+   (p)->Length = sizeof(OBJECT_ATTRIBUTES); \
+   (p)->RootDirectory = (r); \
+   (p)->Attributes = (a); \
+   (p)->ObjectName = (n); \
+   (p)->SecurityDescriptor = (s); \
+   (p)->SecurityQualityOfService = NULL; \
+ }
+#endif
+
 DECLSPEC_IMPORT LPVOID WINAPI Kernel32$VirtualAllocEx(HANDLE hProcess, LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$WriteProcessMemory(HANDLE hProcess, LPVOID lpBaseAddress, LPCVOID lpBuffer, SIZE_T nSize, SIZE_T *lpNumberOfBytesWritten);
 DECLSPEC_IMPORT DWORD Kernel32$GetLastError();
@@ -676,8 +688,11 @@ DECLSPEC_IMPORT int __cdecl Msvcrt$rand(void);
 DECLSPEC_IMPORT time_t Msvcrt$_time64(time_t _Time);
 DECLSPEC_IMPORT void *__cdecl Msvcrt$malloc(size_t _Size);
 DECLSPEC_IMPORT void Msvcrt$free(void *_Memory);
+DECLSPEC_IMPORT errno_t Msvcrt$wcscpy_s(wchar_t *_Dst, rsize_t _SizeInWords, const wchar_t *_Src);
+DECLSPEC_IMPORT errno_t Msvcrt$wcscat_s(wchar_t * _Dst, rsize_t _SizeInWords, const wchar_t *_Src);
+DECLSPEC_IMPORT int Ntdll$swprintf(wchar_t *__stream, size_t __count, const wchar_t *__format, ...);
 
-DECLSPEC_IMPORT NTSTATUS NTAPI NtAlpcCreatePort(PHANDLE PortHandle, POBJECT_ATTRIBUTES ObjectAttributes, PALPC_PORT_ATTRIBUTES PortAttributes);
+DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtAlpcCreatePort(PHANDLE PortHandle, POBJECT_ATTRIBUTES ObjectAttributes, PALPC_PORT_ATTRIBUTES PortAttributes);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtSetTimer2(HANDLE TimerHandle, PLARGE_INTEGER DueTime, PLARGE_INTEGER Period, PT2_SET_PARAMETERS Parameters);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtQueryInformationProcess(IN HANDLE ProcessHandle, IN PROCESSINFOCLASS ProcessInformationClass, OUT PVOID ProcessInformation, IN ULONG ProcessInformationLength, OUT PULONG ReturnLength OPTIONAL);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtQueryObject(HANDLE Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, PVOID ObjectInformation, ULONG ObjectInformationLength, PULONG ReturnLength);
@@ -688,3 +703,4 @@ DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$TpAllocAlpcCompletion(PFULL_TP_ALPC* AlpcRe
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtAlpcSetInformation(HANDLE PortHandle, ALPC_PORT_INFORMATION_CLASS PortInformationClass, PVOID PortInformation, ULONG Length);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtAlpcConnectPort(PHANDLE PortHandle, PUNICODE_STRING PortName, POBJECT_ATTRIBUTES ObjectAttributes, PALPC_PORT_ATTRIBUTES PortAttributes, ULONG Flags, PSID RequiredServerSid, PPORT_MESSAGE ConnectionMessage, PSIZE_T BufferLength, PALPC_MESSAGE_ATTRIBUTES OutMessageAttributes, PALPC_MESSAGE_ATTRIBUTES InMessageAttributes, PLARGE_INTEGER Timeout);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtSetInformationFile(HANDLE FileHandle, PIO_STATUS_BLOCK IoStatusBlock, PVOID FileInformation, ULONG Length, FILE_INFORMATION_CLASS FileInformationClass);
+DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$RtlInitUnicodeString(PUNICODE_STRING DestinationString, PCWSTR SourceString);
