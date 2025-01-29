@@ -678,6 +678,9 @@ DECLSPEC_IMPORT WINBASEAPI PTP_IO WINAPI Kernel32$CreateThreadpoolIo(HANDLE fl, 
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped);
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$VirtualProtectEx(HANDLE hProcess, LPVOID lpAddress, SIZE_T dwSize, DWORD flNewProtect, PDWORD lpflOldProtect);
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$DeleteFileW(LPCWSTR lpFileName);
+DECLSPEC_IMPORT HANDLE WINAPI Kernel32$CreateJobObjectA(LPSECURITY_ATTRIBUTES lpJobAttributes, LPCSTR lpName);
+DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$SetInformationJobObject(HANDLE hJob, JOBOBJECTINFOCLASS JobObjectInformationClass, LPVOID lpJobObjectInformation, DWORD cbJobObjectInformationLength);
+DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$AssignProcessToJobObject(HANDLE hJob, HANDLE hProcess);
 
 DECLSPEC_IMPORT int Msvcrt$iswprint(wint_t _C);
 DECLSPEC_IMPORT int Msvcrt$memcmp(const void *_Buf1, const void *_Buf2, size_t _Size);
