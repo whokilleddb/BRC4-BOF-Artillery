@@ -681,6 +681,7 @@ DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$DeleteFileW(LPCWSTR lpFileName);
 DECLSPEC_IMPORT HANDLE WINAPI Kernel32$CreateJobObjectA(LPSECURITY_ATTRIBUTES lpJobAttributes, LPCSTR lpName);
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$SetInformationJobObject(HANDLE hJob, JOBOBJECTINFOCLASS JobObjectInformationClass, LPVOID lpJobObjectInformation, DWORD cbJobObjectInformationLength);
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$AssignProcessToJobObject(HANDLE hJob, HANDLE hProcess);
+DECLSPEC_IMPORT PTP_TIMER WINAPI Kernel32$CreateThreadpoolTimer(PTP_TIMER_CALLBACK pfnti, PVOID pv, PTP_CALLBACK_ENVIRON pcbe);
 
 DECLSPEC_IMPORT int Msvcrt$iswprint(wint_t _C);
 DECLSPEC_IMPORT int Msvcrt$memcmp(const void *_Buf1, const void *_Buf2, size_t _Size);
@@ -700,7 +701,7 @@ DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtSetTimer2(HANDLE TimerHandle, PLARGE_INTE
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtQueryInformationProcess(IN HANDLE ProcessHandle, IN PROCESSINFOCLASS ProcessInformationClass, OUT PVOID ProcessInformation, IN ULONG ProcessInformationLength, OUT PULONG ReturnLength OPTIONAL);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtQueryObject(HANDLE Handle, OBJECT_INFORMATION_CLASS ObjectInformationClass, PVOID ObjectInformation, ULONG ObjectInformationLength, PULONG ReturnLength);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtQueryInformationWorkerFactory(HANDLE WorkerFactoryHandle, QUERY_WORKERFACTORYINFOCLASS WorkerFactoryInformationClass, PVOID WorkerFactoryInformation, ULONG WorkerFactoryInformationLength, PULONG ReturnLength);
-DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$ZwSetIoCompletion(HANDLE IoCompletionHandle, PVOID KeyContext, PVOID ApcContext, NTSTATUS IoStatus, ULONG_PTR IoStatusInformation);
+DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtSetIoCompletion(HANDLE IoCompletionHandle, PVOID KeyContext, PVOID ApcContext, NTSTATUS IoStatus, ULONG_PTR IoStatusInformation);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$TpAllocJobNotification(PFULL_TP_JOB* JobReturn, HANDLE HJob, PVOID Callback, PVOID Context, PTP_CALLBACK_ENVIRON CallbackEnviron);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$TpAllocAlpcCompletion(PFULL_TP_ALPC* AlpcReturn, HANDLE AlpcPort, PTP_ALPC_CALLBACK Callback, PVOID Context, PTP_CALLBACK_ENVIRON CallbackEnviron);
 DECLSPEC_IMPORT NTSTATUS NTAPI Ntdll$NtAlpcSetInformation(HANDLE PortHandle, ALPC_PORT_INFORMATION_CLASS PortInformationClass, PVOID PortInformation, ULONG Length);
