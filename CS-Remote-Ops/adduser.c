@@ -18,7 +18,7 @@ DWORD AddUser(LPWSTR lpswzUserName, LPWSTR lpswzPassword, LPWSTR lpswzServerName
     ui.usri1_comment     = NULL;
     ui.usri1_flags       = UF_SCRIPT | UF_NORMAL_ACCOUNT | UF_DONT_EXPIRE_PASSWD;
     ui.usri1_script_path = NULL;
-	return Netapi32$NetUserAdd(lpswzServerName, 1, (LPBYTE)&ui, NULL);
+    return Netapi32$NetUserAdd(lpswzServerName, 1, (LPBYTE)&ui, NULL);
 }
 
 wchar_t* ChartoWchar(char* charString, wchar_t* wcharString) {
@@ -55,11 +55,11 @@ void coffee(char* argv[], int argc, WCHAR** dispatch) {
         lpswzServerName = ChartoWchar(servername, lpswzServerName);
     }
     BadgerDispatch(dispatch, "[*] Server name: %ls\n\n", lpswzServerName);
-	BadgerDispatch(dispatch, "[*] Adding user %ls to %ls\n", lpswzUserName, lpswzServerName ? lpswzServerName : L"the local machine\n\n");
-	dwErrorCode = AddUser(lpswzUserName, lpswzPassword, lpswzServerName);
-	if (NERR_Success != dwErrorCode ) {
-		BadgerDispatch(dispatch, "[-] Failed to add the user to the system: %lu\n", dwErrorCode);
-		return;
-	}
-	BadgerDispatch(dispatch, "[+] Successfully added a user to the system.\n");
+    BadgerDispatch(dispatch, "[*] Adding user %ls to %ls\n", lpswzUserName, lpswzServerName ? lpswzServerName : L"the local machine\n\n");
+    dwErrorCode = AddUser(lpswzUserName, lpswzPassword, lpswzServerName);
+    if (NERR_Success != dwErrorCode ) {
+        BadgerDispatch(dispatch, "[-] Failed to add the user to the system: %lu\n", dwErrorCode);
+	return;
+    }
+    BadgerDispatch(dispatch, "[+] Successfully added a user to the system.\n");
 }
