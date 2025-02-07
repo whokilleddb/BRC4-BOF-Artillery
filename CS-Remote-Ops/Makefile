@@ -6,5 +6,14 @@ make:
 	x86_64-w64-mingw32-gcc make_token_cert.c -c -o out64/make_token_cert64.o
 	i686-w64-mingw32-gcc make_token_cert.c -c -o out86/make_token_cert86.o
 
+	x86_64-w64-mingw32-gcc reg_set.c -c -o out64/reg_set64.o
+	i686-w64-mingw32-gcc reg_set.c -c -o out86/reg_set86.o
+
+	x86_64-w64-mingw32-gcc change_pass.c -c -o out64/change_pass64.o
+	i686-w64-mingw32-gcc change_pass.c -c -o out86/change_pass86.o
+
+	# x86_64-w64-mingw32-gcc adcs_request/adcs_request.c -c -o out64/adcs_request64.o
+	# i686-w64-mingw32-gcc adcs_request/adcs_request.c -c -o out86/adcs_request86.o
+
 clean:
 	rm -rf out64 out86
