@@ -17,6 +17,7 @@ DECLSPEC_IMPORT BOOL BadgerSetdebug();
 DECLSPEC_IMPORT ULONG BadgerGetBufferSize(PVOID buffer);
 DECLSPEC_IMPORT UINT_PTR BadgerSpoofStackFrame(UINT_PTR pWinAPI, int argc, ...);
 DECLSPEC_IMPORT VOID BadgerSetHTTPBuffer(PVOID buffer);
+DECLSPEC_IMPORT VOID BadgerSetToken(HANDLE hToken);
 
 #define KerbSubmitTicketMessage 21
 

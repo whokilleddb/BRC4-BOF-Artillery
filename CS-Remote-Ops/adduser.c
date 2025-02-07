@@ -23,7 +23,6 @@ DWORD AddUser(LPWSTR lpswzUserName, LPWSTR lpswzPassword, LPWSTR lpswzServerName
 
 wchar_t* ChartoWchar(char* charString, wchar_t* wcharString) {
     int size_needed;
-    
     size_needed = Kernel32$MultiByteToWideChar(CP_ACP, 0, charString, -1, NULL, 0);
     wcharString = BadgerAlloc(size_needed * sizeof(WCHAR));
     if(!Kernel32$MultiByteToWideChar(CP_ACP, 0, charString, -1, wcharString, size_needed)) {
@@ -35,7 +34,7 @@ wchar_t* ChartoWchar(char* charString, wchar_t* wcharString) {
 
 void coffee(char* argv[], int argc, WCHAR** dispatch) {
     if (argc != 3) {
-        BadgerDispatch(dispatch, "[!] Usage: adduser.o <user> <password> <hostname>\n Note: Keep hostname 'localhost' for local machine\n");
+        BadgerDispatch(dispatch, "[!] Usage: adduser.o <user> <password> <hostname>\n[!] Note: Keep hostname 'localhost' for local machine\n");
         return;
     }
     g_dispatch = dispatch;
@@ -54,12 +53,12 @@ void coffee(char* argv[], int argc, WCHAR** dispatch) {
     if ((BadgerStrcmp(servername, "localhost") != 0)) {
         lpswzServerName = ChartoWchar(servername, lpswzServerName);
     }
-    BadgerDispatch(dispatch, "[*] Server name: %ls\n\n", lpswzServerName);
-    BadgerDispatch(dispatch, "[*] Adding user %ls to %ls\n", lpswzUserName, lpswzServerName ? lpswzServerName : L"the local machine\n\n");
+    BadgerDispatch(dispatch, "[*] Server: %ls\n", lpswzServerName ? lpswzServerName : L"localhost");
+    BadgerDispatch(dispatch, "[*] Adding user '%ls' to '%ls'\n", lpswzUserName, lpswzServerName ? lpswzServerName : L"localhost");
     dwErrorCode = AddUser(lpswzUserName, lpswzPassword, lpswzServerName);
-    if (NERR_Success != dwErrorCode ) {
-        BadgerDispatch(dispatch, "[-] Failed to add the user to the system: %lu\n", dwErrorCode);
-	return;
+    if (NERR_Success != dwErrorCode) {
+        BadgerDispatch(dispatch, "[-] Failed: %lu\n", dwErrorCode);
+    	return;
     }
-    BadgerDispatch(dispatch, "[+] Successfully added a user to the system.\n");
+    BadgerDispatch(dispatch, "[+] Success\n");
 }

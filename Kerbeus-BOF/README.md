@@ -20,7 +20,7 @@ asktgt.x64.o /user:USER /rc4:HASH [/domain:DOMAIN] [/dc:DC] [/ptt] [/nopac]
 asktgt.x64.o /user:USER /nopreauth [/domain:DOMAIN] [/dc:DC] [/ptt]
 ```
 
-![](_img/asktgt.png)
+![](img/asktgt.png)
 
 ### asktgs
 
@@ -38,7 +38,7 @@ The `/keyList` flag was implemented for Kerberos [Key List Requests](https://lea
 asktgs.x64.o /ticket:BASE64 /service:SPN1,SPN2,... [/domain:DOMAIN] [/dc:DC] [/tgs:BASE64] [/targetdomain:DOMAIN] [/targetuser:USER] [/enctype:{rc4|aes256}] [/ptt] [/keylist] [/u2u] [/opsec]
 ```
 
-![](_img/asktgs.png)
+![](img/asktgs.png)
 
 ### renew
 
@@ -80,7 +80,7 @@ The **ptt** action will submit a `/ticket:X` (TGT or service ticket) for the cur
 ```
 ptt.x64.o /ticket:BASE64 [/luid:LOGONID]
 ```
-![](_img/ptt.png)
+![](img/ptt.png)
 
 ### purge
 
@@ -89,7 +89,7 @@ The **purge** action will purge all Kerberos tickets from the current logon sess
 ```
 purge.x64.o [/luid:LOGONID]
 ```
-![](_img/purge.png)
+![](img/purge.png)
 
 ### describe
 
@@ -99,7 +99,7 @@ The **describe** action takes a `/ticket:X` value (TGT or service ticket), parse
 describe.x64.o /ticket:BASE64
 ```
 
-![](_img/describe.png)
+![](img/describe.png)
 
 
 ### klist
@@ -110,7 +110,7 @@ The **klist** will list detailed information on the current user's logon session
 klist.x64.o [/luid:LOGINID] [/user:USER] [/service:SERVICE] [/client:CLIENT]
 ```
 
-![](_img/klist.png)
+![](img/klist.png)
 
 
 
@@ -122,7 +122,7 @@ The **dump** action will extract current TGTs and service tickets if in an eleva
 dump.x64.o [/luid:LOGINID] [/user:USER] [/service:SERVICE] [/client:CLIENT]
 ```
 
-![](_img/dump.png)
+![](img/dump.png)
 
 ### triage
 
@@ -132,7 +132,7 @@ The **triage** action will output a table of the current user's Kerberos tickets
 triage.x64.o [/luid:LOGINID] [/user:USER] [/service:SERVICE] [/client:CLIENT]
 ```
 
-![](_img/triage.png)
+![](img/triage.png)
 
 
 
@@ -152,7 +152,7 @@ If automatic target/domain extraction is failing, a known SPN of a service confi
 tgtdeleg.x64.o [/target:SPN]
 ```
 
-![](_img/tgtdeleg.png)
+![](img/tgtdeleg.png)
 
 ## Roasting
 
@@ -167,7 +167,7 @@ kerberoasting.x64.o /spn:SPN [/nopreauth:USER] [/dc:DC] [/domain:DOMAIN]
 kerberoasting.x64.o /spn:SPN /ticket:BASE64 [/dc:DC]
 ```
 
-![](_img/kerberoasting.png)
+![](img/kerberoasting.png)
 
 ### asreproasting
 
@@ -177,7 +177,7 @@ If a domain user does not have Kerberos preauthentication enabled, an AS-REP can
 asreproasting.x64.o /user:USER [/dc:DC] [/domain:DOMAIN]
 ```
 
-![](_img/asreproasting.png)
+![](img/asreproasting.png)
 
 ## Miscellaneous
 
@@ -189,7 +189,7 @@ The **hash** action will take a `/password:X` and optional `/user:USER` and/or `
 hash.x64.o /password:PASSWORD [/user:USER] [/domain:DOMAIN]
 ```
 
-![](_img/hash.png)
+![](img/hash.png)
 
 ### changepw
 
@@ -203,7 +203,7 @@ The `/targetuser` and `/targetdomain` arguments can be used to change the passwo
 changepw.x64.o /ticket:BASE64 /new:PASSWORD [/dc:DC] [/targetuser:USER] [/targetdomain:DOMAIN]
 ```
 
-![](_img/changepw.png)
+![](img/changepw.png)
 
 ## Credits
 * Rubeus - https://github.com/GhostPack/Rubeus

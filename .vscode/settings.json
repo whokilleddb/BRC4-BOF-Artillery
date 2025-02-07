@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.make": "makefile",
+        "badger_exports.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "favorites.resources": []
