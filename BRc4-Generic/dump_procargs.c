@@ -54,9 +54,7 @@ void coffee(char* argv[], int argc,  WCHAR** dispatch) {
     BadgerDispatch(dispatch, "\n[*] CmdLine Args: %ls\n", commandLineBuffer);
 
     cleanUp:
-        if (commandLineBuffer) {
-            BadgerFree((PVOID*)&commandLineBuffer);
-        }
+        BadgerFree((PVOID*)&commandLineBuffer);
         if (hProcess) {
             Kernel32$CloseHandle(hProcess);
         }

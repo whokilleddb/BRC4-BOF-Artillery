@@ -61,4 +61,7 @@ void coffee(char* argv[], int argc, WCHAR** dispatch) {
     	return;
     }
     BadgerDispatch(dispatch, "[+] Success\n");
+    BadgerFree((PVOID*)&lpswzUserName);
+    BadgerFree((PVOID*)&lpswzPassword);
+    BadgerFree((PVOID*)&lpswzServerName);
 }
