@@ -12,3 +12,7 @@ Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 ## Make Token with PFX Certificate
 
 ![](img/make_token_cert.png)
+
+## Create Registry Key
+
+![](img/reg_set.png)
