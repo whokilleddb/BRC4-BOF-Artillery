@@ -8,10 +8,10 @@ DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegConnectRegistryA(LPCSTR lpMachineName
 DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegCreateKeyExA(HKEY hKey, LPCSTR lpSubKey, DWORD Reserved, LPSTR lpClass, DWORD dwOptions, REGSAM samDesired, const LPSECURITY_ATTRIBUTES lpSecurityAttributes, PHKEY phkResult, LPDWORD lpdwDisposition);
 DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegSetValueExA(HKEY hKey, LPCSTR lpValueName, DWORD Reserved, DWORD dwType, const BYTE *lpData, DWORD cbData);
 DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegCloseKey(HKEY hKey);
+
 DECLSPEC_IMPORT int WINAPI Msvcrt$isxdigit(int c);
 DECLSPEC_IMPORT int WINAPI Msvcrt$isdigit(int c);
 DECLSPEC_IMPORT unsigned long WINAPI Msvcrt$strtoul(char *strSource, char **endptr, int base);
-
 
 DWORD set_regkey(const char * hostname, HKEY hive, const char * path, const char * key, DWORD type, const BYTE * data, DWORD datalen) {
 	DWORD dwresult = ERROR_SUCCESS;
@@ -19,36 +19,35 @@ DWORD set_regkey(const char * hostname, HKEY hive, const char * path, const char
 	HKEY RemoteKey = NULL;
 	HKEY targetkey = NULL;
 
-	if (hostname == NULL) {
+	if (! hostname) {
 		dwresult = Advapi32$RegOpenKeyExA(hive, NULL, 0, KEY_WRITE, &rootkey);
-		if(ERROR_SUCCESS != dwresult) {
-			BadgerDispatch(g_dispatch, "[-] Open key function failed (%lx)\n", dwresult); 
+		if (dwresult != ERROR_SUCCESS) {
+			BadgerDispatch(g_dispatch, "[-] Error RegOpenKeyExA: %lx\n", dwresult); 
 			goto set_regkey_end;
 		}
 	} else {
 		dwresult = Advapi32$RegConnectRegistryA(hostname, hive, &RemoteKey);
-		if (ERROR_SUCCESS != dwresult) {
-			BadgerDispatch(g_dispatch, "[-] Connect registry function failed (%lx)\n", dwresult); 
+		if (dwresult != ERROR_SUCCESS) {
+			BadgerDispatch(g_dispatch, "[-] Error RegConnectRegistryA: %lx\n", dwresult); 
 			goto set_regkey_end;
 		}
-		BadgerDispatch(g_dispatch, "[*] Remote key: %s", RemoteKey);
 		dwresult = Advapi32$RegOpenKeyExA(RemoteKey, NULL, 0, KEY_WRITE, &rootkey);
 		if (ERROR_SUCCESS != dwresult) {
-			BadgerDispatch(g_dispatch, "[-] Open key function failed (%lx)\n", dwresult); 
+			BadgerDispatch(g_dispatch, "[-] Error RegOpenKeyExA: %lx\n", dwresult); 
 			goto set_regkey_end;
 		}
 	}
 	dwresult = Advapi32$RegCreateKeyExA(rootkey,path,0,NULL,0,KEY_WRITE,NULL,&targetkey,NULL);
 	if (ERROR_SUCCESS != dwresult) {
-		BadgerDispatch(g_dispatch, "[-] Create key function failed (%lx)\n", dwresult); 
+		BadgerDispatch(g_dispatch, "[-] Error RegCreateKeyExA: %lx\n", dwresult); 
 		goto set_regkey_end;
 	}
 	dwresult = Advapi32$RegSetValueExA(targetkey, key, 0, type, data, datalen);
 	if (ERROR_SUCCESS != dwresult) {
-		BadgerDispatch(g_dispatch, "[-] Set value function failed (%lx)\n", dwresult); 
+		BadgerDispatch(g_dispatch, "[-] Error RegSetValueExA: %lx\n", dwresult); 
 		goto set_regkey_end;
 	}
-	BadgerDispatch(g_dispatch, "[+] Successfully set regkey\n");
+	BadgerDispatch(g_dispatch, "[+] Success\n");
 
 set_regkey_end:
 	if (RemoteKey) {
@@ -102,7 +101,7 @@ void coffee(char *argv[], int argc, WCHAR** dispatch) {
 	g_dispatch = dispatch;
 
 	if (argc != 6) {
-        BadgerDispatch(dispatch, "[!] Usage: reg_set.o <Registry Hive> <Hostname> <Registry Path> <Registry Key Value> [-h|-i|-a] <Registry Key Data>\n NOTE:\n 1. Specify Registry hive as follows, HKEY_CLASSES_ROOT as HKCR, HKEY_CURRENT_USER as HKCU, HKEY_LOCAL_MACHINE as HKLM, HKEY_USERS as HKU and HKEY_CURRENT_CONFIG as HKCC \n 2. Use empty string \"\" for no path. \n 3. Keep hostname 'localhost' for local machine\n 4. Specify -h option for hex data, -i for integer data, -a for ascii data for the registry key data of key Value\n 5. E.g.: reg-set.o HKCU localhost \"Uninstall\\Test\" TestVal -h 0xefcdcdcd\"\n");
+        BadgerDispatch(dispatch, "[!] Usage: reg_set.o <Registry Hive> <Hostname> <Registry Path> <Registry Key Value> [-h|-i|-a] <Registry Key Data>\n NOTE:\n 1. Specify Registry hive as follows, HKEY_CLASSES_ROOT as HKCR, HKEY_CURRENT_USER as HKCU, HKEY_LOCAL_MACHINE as HKLM, HKEY_USERS as HKU and HKEY_CURRENT_CONFIG as HKCC \n 2. Use empty string \"\" for no path. \n 3. Keep hostname 'localhost' for local machine\n 4. Specify -h option for hex data, -i for integer data, -a for ascii data for the registry key data of key Value\n 5. E.g.: reg-set.o HKCU localhost \"Uninstall\\Test\" TestVal -h 0xefcdcdcd\n");
         return;
     }
 	hkey = argv[0];
@@ -122,26 +121,25 @@ void coffee(char *argv[], int argc, WCHAR** dispatch) {
 		hkRootKey = HKEY_CURRENT_CONFIG;
 		hkey = "HKEY_CURRENT_CONFIG";
 	} else {
-		BadgerDispatch(dispatch, " [-] Invalid option, Specify either of the following options. \n HKEY_CLASSES_ROOT as HKCR, HKEY_CURRENT_USER as HKCU, HKEY_LOCAL_MACHINE as HKLM, HKEY_USERS as HKU and HKEY_CURRENT_CONFIG as HKCC \n");
+		BadgerDispatch(dispatch, " [-] Invalid option. Select one of the following: HKEY_CLASSES_ROOT as HKCR, HKEY_CURRENT_USER as HKCU, HKEY_LOCAL_MACHINE as HKLM, HKEY_USERS as HKU and HKEY_CURRENT_CONFIG as HKCC\n");
 		return;
 	}
 	lpszHostName = argv[1];
-	BadgerDispatch(dispatch, "[*] HostName: %s\n", lpszHostName);
-	if (BadgerStrcmp(lpszHostName, "localhost") == 0)
-	{
+	BadgerDispatch(dispatch, "[*] Hostname: %s\n", lpszHostName);
+	if (BadgerStrcmp(lpszHostName, "localhost") == 0) {
 		lpszHostName = NULL;
 	}
 	lpszRegPathName = argv[2];
-	BadgerDispatch(dispatch, "[*] Registry Path: %s\n", lpszRegPathName);
+	BadgerDispatch(dispatch, "[*] Registry path: %s\n", lpszRegPathName);
 	if (lpszRegPathName == "") {
 		lpszRegPathName = NULL;
 	}
 	lpszRegValueName = argv[3];
-	BadgerDispatch(dispatch, "[*] Registry Value: %s\n", lpszRegValueName);
+	BadgerDispatch(dispatch, "[*] Registry value: %s\n", lpszRegValueName);
 	option = argv[4];
 	BadgerDispatch(dispatch, "[*] Option: %s\n", option);
 	dwStrRegData = argv[5];
-	BadgerDispatch(dispatch, "[*] Registry Data: %s\n", dwStrRegData);
+	BadgerDispatch(dispatch, "[*] Registry data: %s\n", dwStrRegData);
 	if (BadgerStrcmp(option, "-h") == 0) {
 		if (is_hex(dwStrRegData)) {
 			dwRegData = Msvcrt$strtoul(dwStrRegData, NULL, 16);
@@ -157,18 +155,21 @@ void coffee(char *argv[], int argc, WCHAR** dispatch) {
 	} else if (BadgerStrcmp(option, "-a") == 0) {
 		dwRegDataLength = BadgerStrlen(dwStrRegData)+1;
 	} else {
-		BadgerDispatch(dispatch, "[-] Invalid option, specify '-h' for hex data, '-i' for numeric data, and '-a' for ASCII data \n");
+		BadgerDispatch(dispatch, "[-] Invalid option. Select '-h' for hex data, '-i' for numeric data, and '-a' for ASCII data\n");
 		return;
 	}
-	BadgerDispatch(dispatch, "[*] Setting registry key %s\\%s\\%s\\%s with data %s\n", ((lpszHostName == NULL)?"\\\\.":lpszHostName), hkey, lpszRegPathName, lpszRegValueName, dwStrRegData);
-	if(dwType == REG_DWORD) {
-		dwErrorCode = set_regkey(lpszHostName, hkRootKey, lpszRegPathName, lpszRegValueName, dwType, (LPBYTE)(&dwRegData), dwRegDataLength);
-	} else {
-		dwErrorCode = set_regkey(lpszHostName, hkRootKey, lpszRegPathName, lpszRegValueName, dwType, (LPBYTE)dwStrRegData, dwRegDataLength);
+	BadgerDispatch(dispatch, "[*] Setting registry key: %s\\%s\\%s => %s => %s\n", ((lpszHostName == NULL) ? "\\\\." : lpszHostName), hkey, lpszRegPathName, lpszRegValueName, dwStrRegData);
+	LPBYTE regData = dwStrRegData;
+	if (dwType == REG_DWORD) {
+		regData = (LPBYTE)&dwRegData;
 	}
+	dwErrorCode = set_regkey(lpszHostName, hkRootKey, lpszRegPathName, lpszRegValueName, dwType, regData, dwRegDataLength);
+	if (dwErrorCode != ERROR_SUCCESS) {
+		BadgerDispatch(dispatch, "[-] Failed\n");
+	}
+
     if (hkRootKey) {
 		Advapi32$RegCloseKey(hkRootKey);
-		hkRootKey = NULL;
 	}
 	return;
 }
