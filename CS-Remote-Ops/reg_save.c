@@ -72,11 +72,11 @@ void coffee( char ** argv, int argc, WCHAR** dispatch) {
     g_dispatch = dispatch;
 
 	if (argc != 3) {
-        BadgerDispatch(dispatch, "[!] Usage: reg_save.o <Registry Hive> <Filename> <Registry Path>\n[!] NOTE:\n 1. Specify Registry hive as follows, HKEY_CLASSES_ROOT as HKCR, HKEY_CURRENT_USER as HKCU, HKEY_LOCAL_MACHINE as HKLM, HKEY_USERS as HKU and HKEY_CURRENT_CONFIG as HKCC\n 2. Use empty string \"\" for no path\n");
+        BadgerDispatch(dispatch, "[!] Usage: reg_save.o <Registry Hive> <Registry Path> <Filename>\n[!] NOTE:\n 1. Specify Registry hive as follows, HKEY_CLASSES_ROOT as HKCR, HKEY_CURRENT_USER as HKCU, HKEY_LOCAL_MACHINE as HKLM, HKEY_USERS as HKU and HKEY_CURRENT_CONFIG as HKCC\n 2. Use empty string \"\" for no path\n");
         return;
     }
 	hkey = argv[0];
-	BadgerDispatch(dispatch, "[*] hkey : %s\n", hkey);
+	BadgerDispatch(dispatch, "[*] HKEY : %s\n", hkey);
 
 	if (BadgerStrcmp(hkey, "HKCR") == 0) {
 		hkRootKey = HKEY_CLASSES_ROOT;
@@ -97,13 +97,13 @@ void coffee( char ** argv, int argc, WCHAR** dispatch) {
 		BadgerDispatch(dispatch, " [-] Invalid option, Specify either of the following options.\n HKEY_CLASSES_ROOT as HKCR, HKEY_CURRENT_USER as HKCU, HKEY_LOCAL_MACHINE as HKLM, HKEY_USERS as HKU and HKEY_CURRENT_CONFIG as HKCC\n");
 		return;
 	}
-	lpszOutputFilename = argv[1];
+	lpszOutputFilename = argv[2];
 	if (BadgerStrlen(lpszOutputFilename) > MAX_PATH) {
 		BadgerDispatch(dispatch, "[-] Filename is greater than %d max size\n", MAX_PATH);
 		return;
 	}
 	BadgerDispatch(dispatch, "[*] Output file: %s\n", lpszOutputFilename);
-	lpszRegPathName = argv[2];
+	lpszRegPathName = argv[1];
     if(lpszRegPathName == "" || lpszRegPathName == NULL) {
         lpszRegPathName = NULL;
     }

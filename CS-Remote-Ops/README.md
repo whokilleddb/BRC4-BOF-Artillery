@@ -17,6 +17,10 @@ Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 
 ![](img/reg_set.png)
 
+## Save Registry
+
+![](img/reg_save.png)
+
 ## Change Password
 
 ![](img/change_pass.png)
