@@ -18,5 +18,8 @@ make:
 	x86_64-w64-mingw32-gcc adcs_enum/adcs_enum.c -c -o out64/adcs_enum64.o
 	i686-w64-mingw32-gcc adcs_enum/adcs_enum.c -c -o out86/adcs_enum86.o
 
+	x86_64-w64-mingw32-gcc reg_save.c -c -o out64/reg_save64.o
+	i686-w64-mingw32-gcc reg_save.c -c -o out86/reg_save86.o
+
 clean:
 	rm -rf out64 out86
