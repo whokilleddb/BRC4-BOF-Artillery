@@ -45,7 +45,7 @@ void coffee(char* argv[], int argc,  WCHAR** dispatch) {
         BadgerDispatch(dispatch, "\n[-] Failed to read process parameters %lu\n", Kernel32$GetLastError());
         goto cleanUp;
     }
-    commandLineBuffer = (WCHAR*)BadgerAlloc(parameters.CommandLine.Length + sizeof(WCHAR));
+    commandLineBuffer = BadgerAlloc(parameters.CommandLine.Length + sizeof(WCHAR));
     if (!Kernel32$ReadProcessMemory(hProcess, parameters.CommandLine.Buffer, commandLineBuffer, parameters.CommandLine.Length, NULL)) {
         BadgerDispatch(dispatch, "\n[-] Failed to read command line buffer %lu\n", Kernel32$GetLastError());
         goto cleanUp;
