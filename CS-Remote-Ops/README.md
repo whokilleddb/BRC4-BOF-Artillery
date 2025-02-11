@@ -44,3 +44,7 @@ Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 ## Unexpire User
 
 ![](img/unexpire_user.png)
+
+## Create scheduled task
+
+![](img/schtasks_create.png)
