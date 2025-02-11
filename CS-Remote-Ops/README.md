@@ -40,3 +40,7 @@ Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 ## Local/Remote Shutdown
 
 ![](img/shutdown.png)
+
+## Unexpire User
+
+![](img/unexpire_user.png)

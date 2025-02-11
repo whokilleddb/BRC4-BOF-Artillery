@@ -27,5 +27,8 @@ make:
 	x86_64-w64-mingw32-gcc reg_del.c -c -o out64/reg_del64.o
 	i686-w64-mingw32-gcc reg_del.c -c -o out86/reg_del86.o
 
+	x86_64-w64-mingw32-gcc unexpire_user.c -c -o out64/unexpire_user64.o
+	i686-w64-mingw32-gcc unexpire_user.c -c -o out86/unexpire_user86.o
+
 clean:
 	rm -rf out64 out86
