@@ -17,5 +17,6 @@ DECLSPEC_IMPORT ULONG BadgerGetBufferSize(PVOID buffer);
 DECLSPEC_IMPORT UINT_PTR BadgerSpoofStackFrame(UINT_PTR pWinAPI, int argc, ...);
 DECLSPEC_IMPORT VOID BadgerSetHTTPBuffer(PVOID buffer);
 DECLSPEC_IMPORT VOID BadgerSetToken(HANDLE hToken);
+DECLSPEC_IMPORT BOOL BadgerAddPrivilege(CHAR* privilegeName);
 
 WCHAR** g_dispatch __attribute__((section(".data"))) = 0;
