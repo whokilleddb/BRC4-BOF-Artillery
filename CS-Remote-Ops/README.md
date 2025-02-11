@@ -32,3 +32,7 @@ Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 ## ADCS Request 
 
 ![](img/adcs_request.png)
+
+## Local/Remote Shutdown
+
+![](img/shutdown.png)
