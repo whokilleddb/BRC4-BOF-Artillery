@@ -8,6 +8,9 @@ Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 
 ![](img/add_user.png)
 
+## Add User To Group
+
+![](img/adduser_to_group.png)
 
 ## Make Token with PFX Certificate
 
