@@ -42,5 +42,8 @@ make:
 	x86_64-w64-mingw32-gcc schtasks/schtasks_stop.c -c -o out64/schtasks_stop64.o
 	i686-w64-mingw32-gcc schtasks/schtasks_stop.c -c -o out86/schtasks_stop86.o
 
+	x86_64-w64-mingw32-gcc adduser_to_group.c -c -o out64/adduser_to_group64.o
+	i686-w64-mingw32-gcc adduser_to_group.c -c -o out86/adduser_to_group86.o
+
 clean:
 	rm -rf out64 out86
