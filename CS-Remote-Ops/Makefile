@@ -33,5 +33,14 @@ make:
 	x86_64-w64-mingw32-gcc schtasks/schtasks_create.c -c -o out64/schtasks_create64.o
 	i686-w64-mingw32-gcc schtasks/schtasks_create.c -c -o out86/schtasks_create86.o
 
+	x86_64-w64-mingw32-gcc schtasks/schtasks_del.c -c -o out64/schtasks_del64.o
+	i686-w64-mingw32-gcc schtasks/schtasks_del.c -c -o out86/schtasks_del86.o
+
+	x86_64-w64-mingw32-gcc schtasks/schtasks_run.c -c -o out64/schtasks_run64.o
+	i686-w64-mingw32-gcc schtasks/schtasks_run.c -c -o out86/schtasks_run86.o
+
+	x86_64-w64-mingw32-gcc schtasks/schtasks_stop.c -c -o out64/schtasks_stop64.o
+	i686-w64-mingw32-gcc schtasks/schtasks_stop.c -c -o out86/schtasks_stop86.o
+
 clean:
 	rm -rf out64 out86

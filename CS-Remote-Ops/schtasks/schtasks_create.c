@@ -422,8 +422,6 @@ createTask_end:
 	return (DWORD)hr;
 }
 
-#define TEST_TASK_PATH        L"\\BOF_FOLDER\\BOF_TASK"
-
 VOID ConvertCharToWChar(char* charString, wchar_t** wcharString) {
     int size_needed = Kernel32$MultiByteToWideChar(CP_ACP, 0, charString, -1, NULL, 0);
     *wcharString = (wchar_t*) BadgerAlloc(size_needed * sizeof(wchar_t));

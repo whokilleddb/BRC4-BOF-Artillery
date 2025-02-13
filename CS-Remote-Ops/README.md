@@ -48,3 +48,15 @@ Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 ## Create scheduled task
 
 ![](img/schtasks_create.png)
+
+## Delete scheduled task
+
+![](img/schtasks_del.png)
+
+## Run scheduled task
+
+![](img/schtasks_run.png)
+
+## Stop scheduled task
+
+![](img/schtasks_stop.png)

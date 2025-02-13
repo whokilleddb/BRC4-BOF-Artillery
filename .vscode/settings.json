@@ -1,7 +1,11 @@
 {
     "files.associations": {
         "*.make": "makefile",
-        "badger_exports.h": "c"
+        "badger_exports.h": "c",
+        "cwchar": "c",
+        "limits": "c",
+        "type_traits": "c",
+        "lm.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "favorites.resources": []
