@@ -65,11 +65,11 @@ VOID coffee(char** argv, int argc, WCHAR** dispatch) {
         return;
     }
     option = argv[0];
-    if (BadgerStrcmp(option, "domain")==0) {
+    if (BadgerStrcmp(option, "domain") == 0) {
         local = 0;
-    } else if (BadgerStrcmp(option, "remote")==0) {
+    } else if (BadgerStrcmp(option, "remote") == 0) {
         local = 1;
-    } else if (BadgerStrcmp(option, "local")==0) {
+    } else if (BadgerStrcmp(option, "local") == 0) {
         local = 2;
     } else {
         BadgerDispatch(dispatch, "[-] Invalid option. Specify either <domain/remote/local>\n");
