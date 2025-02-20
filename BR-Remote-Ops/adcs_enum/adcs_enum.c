@@ -11,7 +11,7 @@
 #include <iads.h>
 #include <wincrypt.h>
 #include "certca.h"
-#include "../badger_exports.h"
+#include "../../badger_exports.h"
 
 DECLSPEC_IMPORT HRESULT WINAPI Certcli$CAEnumFirstCA(IN LPCWSTR wszScope, IN DWORD dwFlags, OUT LPVOID * phCAInfo);
 DECLSPEC_IMPORT HRESULT WINAPI Certcli$CAEnumNextCA(IN LPVOID hPrevCA, OUT LPVOID * phCAInfo);

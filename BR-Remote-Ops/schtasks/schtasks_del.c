@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <taskschd.h>
 #include <sddl.h>
-#include "../badger_exports.h"
+#include "../../badger_exports.h"
 
 DECLSPEC_IMPORT WINOLEAUTAPI_(void) Oleaut32$VariantInit(VARIANTARG *pvarg);
 DECLSPEC_IMPORT WINOLEAPI Ole32$CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit);

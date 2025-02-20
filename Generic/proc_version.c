@@ -38,7 +38,7 @@ void coffee(char* argv[], int argc, WCHAR** dispatch) {
     if (Kernel32$Module32First(snapshot, &moduleEntry)) {
         do {
             if (moduleEntry.th32ProcessID == pid) {
-                BadgerDispatch(dispatch, "[*] Name: %s\n [*] File Path: %s\n", moduleEntry.szModule, moduleEntry.szExePath);
+                BadgerDispatch(dispatch, "[*] Name: %s\n[*] File Path: %s\n", moduleEntry.szModule, moduleEntry.szExePath);
                 DWORD dwHandle;
                 DWORD dwSize = Version$GetFileVersionInfoSizeA(moduleEntry.szExePath, &dwHandle);
                 if (dwSize > 0) {

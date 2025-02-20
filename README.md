@@ -5,6 +5,7 @@ This repository includes a collection of open-source and custom-built BOFs that 
 ## BRc4-Generic
 
 Original Source: Original BRc4 BOFs which I wrote myself for debugging activities, including code for old features like Cryptvortex, shadowclone, contact-harvester etc.
+Original Source: https://github.com/KingOfTheNOPs/Get-NetNTLM
 
 ## Kerbeus-BOF
 Original Source: https://github.com/RalfHacker/Kerbeus-BOF

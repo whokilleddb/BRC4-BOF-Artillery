@@ -15,8 +15,6 @@
 
 #define KerbSubmitTicketMessage 21
 
-WCHAR** g_dispatch __attribute__((section(".data"))) = 0;
-
 typedef struct KERB_CRYPTO_KEY32 {
     LONG KeyType;
     ULONG Length;

@@ -12,7 +12,7 @@ DECLSPEC_IMPORT NTSTATUS Ntdll$NtQueryInformationProcess(HANDLE ProcessHandle, P
 
 void coffee(char* argv[], int argc,  WCHAR** dispatch) {
     if (argc < 1) {
-        BadgerDispatch(dispatch, "[!] Usage: procargs-COFF.o <pid>\n[!] Eg.: procargs-COFF.o 2920\n");
+        BadgerDispatch(dispatch, "[!] Usage: dump_procargs.o <pid>\n[!] Eg.: dump_procargs.o 2920\n");
         return;
     }
 

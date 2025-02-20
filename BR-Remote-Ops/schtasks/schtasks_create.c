@@ -3,7 +3,7 @@
 #include <taskschd.h>
 #include <sddl.h>
 #include <wchar.h>
-#include "../badger_exports.h"
+#include "../../badger_exports.h"
 
 #define SCHTASKS_USER 0
 #define SCHTASKS_SYSTEM 1

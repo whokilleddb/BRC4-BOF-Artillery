@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <combaseapi.h>
 #include "adcs_request.h"
-#include "../badger_exports.h"
+#include "../../badger_exports.h"
 
 typedef enum {
 	NameUnknown = 0,

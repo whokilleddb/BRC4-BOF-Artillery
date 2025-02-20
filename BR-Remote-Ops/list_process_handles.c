@@ -23,7 +23,11 @@ DECLSPEC_IMPORT HANDLE WINAPI Kernel32$OpenProcess(DWORD dwDesiredAccess, BOOL b
 
 
 VOID ListProcessHandles(DWORD pid) {
-    BadgerDispatch(g_dispatch, "[+] Listing handles for PID: %lu\n", pid);
+    BadgerDispatch(g_dispatch, "[+] Listing handles for PID: %lu\n\n", pid);
+    BadgerDispatch(g_dispatch, "----------------------------------------------------------\n");
+    BadgerDispatch(g_dispatch, "%-10s  | %-25s| %-20s\n", "Handle", "Object Type", "Name");
+    BadgerDispatch(g_dispatch, "----------------------------------------------------------\n");
+
     DWORD dwErrorCode = ERROR_SUCCESS;
     PSYSTEM_HANDLE_INFORMATION handleInfo = NULL;
     ULONG handleInfoSize = 0x10000;
@@ -78,7 +82,9 @@ VOID ListProcessHandles(DWORD pid) {
         dwErrorCode = (DWORD)Ntdll$NtDuplicateObject(processHandle,  (HANDLE) handle.HandleValue, (HANDLE)-1, &dupHandle, 0,  0,  0);
         #pragma GCC diagnostic pop
         if (! NT_SUCCESS(dwErrorCode)) {
-            BadgerDispatch(g_dispatch, "[-] Error NtDuplicateObject: %lx\n", dwErrorCode);
+            if (dwErrorCode != 0xc00000bb) {
+                BadgerDispatch(g_dispatch, "[-] Error NtDuplicateObject: %lx\n", dwErrorCode);
+            }
             continue;
         } 
         objectTypeInfo = (POBJECT_TYPE_INFORMATION)Kernel32$HeapAlloc(Kernel32$GetProcessHeap(), HEAP_ZERO_MEMORY, 0x1000);
@@ -115,11 +121,12 @@ VOID ListProcessHandles(DWORD pid) {
             }
         }
         objectName = *(PUNICODE_STRING)objectNameInfo;
-        if (objectName.Length)
-        {
-            BadgerDispatch(g_dispatch, "[*] [%d] %ls: %ls\n", handle.HandleValue, objectTypeInfo->TypeName.Buffer, objectName.Buffer);
+        if (objectName.Length) {
+            BadgerDispatch(g_dispatch, "0x%-10d| %-25ls| %-20ls\n", handle.HandleValue, objectTypeInfo->TypeName.Buffer, objectName.Buffer);
+            // BadgerDispatch(g_dispatch, "[*] [%d] %ls: %ls\n", handle.HandleValue, objectTypeInfo->TypeName.Buffer, objectName.Buffer);
         } else {
-            BadgerDispatch(g_dispatch, "[*] [%d] %ls: (unnamed)\n", handle.HandleValue, objectTypeInfo->TypeName.Buffer );
+            BadgerDispatch(g_dispatch, "0x%-10d| %-25ls| (unnamed)\n", handle.HandleValue, objectTypeInfo->TypeName.Buffer);
+            // BadgerDispatch(g_dispatch, "[*] [%d] %ls: (unnamed)\n", handle.HandleValue, objectTypeInfo->TypeName.Buffer );
         }
     }
     dwErrorCode = ERROR_SUCCESS;
@@ -150,6 +157,10 @@ VOID ListProcessHandles(DWORD pid) {
 void coffee(char ** argv, int argc, WCHAR** dispatch) {
 	DWORD dwPid = 0;
     g_dispatch = dispatch;
+    if (argc < 1) {
+        BadgerDispatch(dispatch, "[!] Usage: list_process_handles.o <pid>\n[!] Eg.: list_process_handles.o 1234\n");
+        return;
+    }
     dwPid = BadgerAtoi(argv[0]);
     if (dwPid == 0) {
         BadgerDispatch(dispatch, "[-] Invalid PID\n");
