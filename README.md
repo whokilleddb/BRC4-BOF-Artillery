@@ -7,13 +7,21 @@ This repository includes a collection of open-source and custom-built BOFs that 
 Original Source: Original BRc4 BOFs which I wrote myself for debugging activities, including code for old features like Cryptvortex, shadowclone, contact-harvester etc.
 Original Source: https://github.com/KingOfTheNOPs/Get-NetNTLM
 
+View [README](Generic/README.md) for Generic Repo
+
 ## Kerbeus-BOF
 Original Source: https://github.com/RalfHacker/Kerbeus-BOF
 
+View [README](Kerbeus/README.md) for Kerbeus Repo
+
 ## ThreadPoolInjection
 Original Source: https://www.blackhat.com/eu-23/briefings/schedule/#the-pool-party-you-will-never-forget-new-process-injection-techniques-using-windows-thread-pools-35446
+
+View [README](ThreadPoolInjection/README.md) for Kerbeus Repo
 
 ## BR-Remote-Ops
 Original Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 
 Original Source: https://github.com/trustedsec/CS-Situational-Awareness-BOF
+
+View [README](BR-Remote-Ops/README.md) for Kerbeus Repo

@@ -1,4 +1,4 @@
-# Kerbeus-BOF
+# Kerbeus
 
 Badger Object Files for Kerberos abuse. This is an implementation of some important features of the [Rubeus](https://github.com/GhostPack/Rubeus) project, written in C.
 #### NOTE: Readme file has been modified from the original repo to suit the updated content of Brute Ratel screenshots
