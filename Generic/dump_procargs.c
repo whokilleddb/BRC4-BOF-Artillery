@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <winternl.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT DWORD Kernel32$GetLastError();
 DECLSPEC_IMPORT BOOL WINAPI Kernel32$CloseHandle(HANDLE hObject);

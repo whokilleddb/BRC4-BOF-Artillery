@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT DWORD WINAPI Kernel32$GetLastError();
 DECLSPEC_IMPORT DWORD WINAPI Kernel32$CloseHandle(HANDLE hObjec);

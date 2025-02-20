@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 WINADVAPI FARPROC WINAPI Kernel32$GetProcAddress(HMODULE hModule, LPCSTR  lpProcName);
 WINADVAPI HMODULE WINAPI Kernel32$GetModuleHandleA(LPCSTR lpModuleName);

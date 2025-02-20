@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <lm.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT int Msvcrt$swprintf_s(wchar_t *__stream, size_t __count, const wchar_t *__format, ...);
 

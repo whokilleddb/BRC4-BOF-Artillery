@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
-#include "badger_exports.h"
+#include <ntsecapi.h>
+#include "../badger_exports.h"
 
 #define NT_SUCCESS(Status) (((NTSTATUS)(Status)) >= 0)
 #define STATUS_INFO_LENGTH_MISMATCH ((NTSTATUS)0xC0000004L)

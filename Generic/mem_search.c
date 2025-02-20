@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <tlhelp32.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT int Kernel32$MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
 DECLSPEC_IMPORT HANDLE Kernel32$OpenProcess(DWORD dwDesiredAccess, BOOL bInheritHandle, DWORD dwProcessId);

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <tlhelp32.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$Module32First(HANDLE hSnapshot,LPMODULEENTRY32 lpme);
 DECLSPEC_IMPORT WINBOOL WINAPI Kernel32$Module32Next(HANDLE hSnapshot,LPMODULEENTRY32 lpme);

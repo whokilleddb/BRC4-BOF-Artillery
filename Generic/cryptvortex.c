@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 typedef struct _CRYPT_FILE_META {
     CHAR *fileName;

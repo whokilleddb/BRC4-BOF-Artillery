@@ -1,6 +1,6 @@
 #define _WIN32_WINNT 0x0600  // Required for RegDeleteKeyValueA
 #include <windows.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 #define REG_DELETE_KEY 1
 #define REG_DELETE_VALUE 0

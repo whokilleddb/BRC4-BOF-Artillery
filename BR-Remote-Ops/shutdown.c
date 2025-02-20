@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <winreg.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT DWORD WINAPI Kernel32$GetLastError();
 DECLSPEC_IMPORT BOOL Advapi32$InitiateSystemShutdownExA(LPSTR lpMachineName, LPSTR lpMessage, DWORD dwTimeout, BOOL bForceAppsClosed, BOOL bRebootAfterShutdown, DWORD dwReason);

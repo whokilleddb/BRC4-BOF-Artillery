@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <lm.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT NET_API_STATUS NET_API_FUNCTION Netapi32$NetUserAdd(LPCWSTR servername, DWORD level, LPBYTE buf, LPDWORD parm_err);
 DECLSPEC_IMPORT int WINAPI Kernel32$MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);

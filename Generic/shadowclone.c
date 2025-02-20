@@ -1,4 +1,4 @@
-#include "badger_exports.h"
+#include "../badger_exports.h"
 #pragma pack(push,4)
 #ifndef HPSS
 #define HPSS HANDLE

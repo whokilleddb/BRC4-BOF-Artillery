@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <lmaccess.h>
 #include "lmerr.h"
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT WINBASEAPI int WINAPI Kernel32$MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
 DECLSPEC_IMPORT NET_API_STATUS WINAPI Netapi32$NetUserSetInfo(LPCWSTR servername,LPCWSTR username,DWORD level,LPBYTE buf,LPDWORD parm_err);

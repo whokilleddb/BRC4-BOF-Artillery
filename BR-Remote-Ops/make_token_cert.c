@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <lmaccess.h>
 #include <wincred.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 DECLSPEC_IMPORT WINIMPM HCERTSTORE WINAPI Crypt32$CertOpenStore(LPCSTR lpszStoreProvider, DWORD dwEncodingType, HCRYPTPROV_LEGACY hCryptProv, DWORD dwFlags, const void *pvPara);
 DECLSPEC_IMPORT WINIMPM HCERTSTORE WINAPI Crypt32$PFXImportCertStore(CRYPT_DATA_BLOB *pPFX, LPCWSTR szPassword, DWORD dwFlags);

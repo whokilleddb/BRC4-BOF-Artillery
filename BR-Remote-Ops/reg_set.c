@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <stdlib.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 
 DECLSPEC_IMPORT LSTATUS WINAPI Advapi32$RegOpenKeyExA(HKEY hKey, LPCSTR lpSubKey, DWORD ulOptions, REGSAM samDesired, PHKEY phkResult);

@@ -5,7 +5,11 @@
         "cwchar": "c",
         "limits": "c",
         "type_traits": "c",
-        "lm.h": "c"
+        "lm.h": "c",
+        "string.h": "c",
+        "ntsecapi.h": "c",
+        "tlhelp32.h": "c",
+        "windows.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "favorites.resources": []

@@ -10,8 +10,27 @@
 
 #include <dsgetdc.h>
 #include <ntsecapi.h>
-#include "badger_exports.h"
+#include "../../badger_exports.h"
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
+
+#define KerbSubmitTicketMessage 21
+
+WCHAR** g_dispatch __attribute__((section(".data"))) = 0;
+
+typedef struct KERB_CRYPTO_KEY32 {
+    LONG KeyType;
+    ULONG Length;
+    ULONG Offset;
+} KERB_CRYPTO_KEY32, *PKERB_CRYPTO_KEY32;
+
+typedef struct _KERB_SUBMIT_TKT_REQUEST {
+    KERB_PROTOCOL_MESSAGE_TYPE MessageType;
+    LUID LogonId;
+    ULONG Flags;
+    KERB_CRYPTO_KEY32 Key;
+    ULONG KerbCredSize;
+    ULONG KerbCredOffset;
+} KERB_SUBMIT_TKT_REQUEST, *PKERB_SUBMIT_TKT_REQUEST;
 
 typedef struct _LOGON_SESSION_DATA {
 	PSECURITY_LOGON_SESSION_DATA* sessionData;

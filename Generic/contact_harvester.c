@@ -1,4 +1,4 @@
-#include "badger_exports.h"
+#include "../badger_exports.h"
 
 typedef struct _OutlookContactRecord {
 	BSTR Name;

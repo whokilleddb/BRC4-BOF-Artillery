@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <ntstatus.h>
 #include <winternl.h>
-#include "badger_exports.h"
+#include "../badger_exports.h"
  
 #define SystemHandleInformation 16
 #define ObjectBasicInformation 0
@@ -22,7 +22,8 @@ DECLSPEC_IMPORT LPVOID WINAPI Kernel32$HeapReAlloc(HANDLE hHeap, DWORD dwFlags, 
 DECLSPEC_IMPORT HANDLE WINAPI Kernel32$OpenProcess(DWORD dwDesiredAccess, BOOL bInheritHandle, DWORD dwProcessId);
 
 
-DWORD ListProcessHandles(DWORD pid) {
+VOID ListProcessHandles(DWORD pid) {
+    BadgerDispatch(g_dispatch, "[+] Listing handles for PID: %lu\n", pid);
     DWORD dwErrorCode = ERROR_SUCCESS;
     PSYSTEM_HANDLE_INFORMATION handleInfo = NULL;
     ULONG handleInfoSize = 0x10000;
@@ -33,27 +34,24 @@ DWORD ListProcessHandles(DWORD pid) {
     PVOID objectNameInfo = NULL;
 
     processHandle = Kernel32$OpenProcess(PROCESS_DUP_HANDLE, FALSE, pid);
-    if (NULL == processHandle) {
-        dwErrorCode = Kernel32$GetLastError();
-        BadgerDispatch(g_dispatch, "[-] Could not open PID %lu! (Don't try to open a system process.)\n", pid);
+    if (! processHandle) {
+        BadgerDispatch(g_dispatch, "[-] Error OpenProcess: %lu\n", Kernel32$GetLastError());
         goto cleanup;
     }
     handleInfo = (PSYSTEM_HANDLE_INFORMATION)Kernel32$HeapAlloc(Kernel32$GetProcessHeap(), HEAP_ZERO_MEMORY, handleInfoSize);
-    if ( NULL == handleInfo ) {
-        dwErrorCode = ERROR_OUTOFMEMORY;
-        BadgerDispatch(g_dispatch, "[-] Failed to allocate handle info\n");
+    if (! handleInfo ) {
+        BadgerDispatch(g_dispatch, "[-] Error HeapAlloc: %lu\n", ERROR_OUTOFMEMORY);
         goto cleanup;
     }
     while ((dwErrorCode = (DWORD)Ntdll$NtQuerySystemInformation(SystemHandleInformation, handleInfo, handleInfoSize, NULL)) == STATUS_INFO_LENGTH_MISMATCH) {
         handleInfo = (PSYSTEM_HANDLE_INFORMATION)Kernel32$HeapReAlloc(Kernel32$GetProcessHeap(), HEAP_ZERO_MEMORY, handleInfo, handleInfoSize *= 2);
-        if ( NULL == handleInfo ) {
-            dwErrorCode = ERROR_OUTOFMEMORY;
-            BadgerDispatch(g_dispatch, "[-] Failed to reallocate handle info\n");
+        if (! handleInfo ) {
+            BadgerDispatch(g_dispatch, "[-] Error HeapAlloc: %lu\n", ERROR_OUTOFMEMORY);
             goto cleanup;
         }
     }
     if (!NT_SUCCESS(dwErrorCode)) {
-        BadgerDispatch(g_dispatch, "[-] NtQuerySystemInformation failed! (%lu)\n", dwErrorCode);
+        BadgerDispatch(g_dispatch, "[-] Error NtQuerySystemInformation: %lu\n", dwErrorCode);
         goto cleanup;
     }
     for (i = 0; i < handleInfo->Count; i++) {
@@ -73,23 +71,24 @@ DWORD ListProcessHandles(DWORD pid) {
             Kernel32$CloseHandle(dupHandle);
             dupHandle = NULL;
         }
-        if (handle.OwnerPid != pid)
+        if (handle.OwnerPid != pid) {
             continue;
+        }
         #pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
-        dwErrorCode = (DWORD)Ntdll$NtDuplicateObject(processHandle,  (HANDLE) handle.HandleValue, Kernel32$GetCurrentProcess(), &dupHandle, 0,  0,  0);
+        dwErrorCode = (DWORD)Ntdll$NtDuplicateObject(processHandle,  (HANDLE) handle.HandleValue, (HANDLE)-1, &dupHandle, 0,  0,  0);
         #pragma GCC diagnostic pop
-        if (!NT_SUCCESS(dwErrorCode)) {
-            BadgerDispatch(g_dispatch, "[-] Failed to duplicate handle %lx in pid:%lu (%lu)\n", handle.HandleValue, pid, dwErrorCode);
+        if (! NT_SUCCESS(dwErrorCode)) {
+            BadgerDispatch(g_dispatch, "[-] Error NtDuplicateObject: %lx\n", dwErrorCode);
             continue;
         } 
         objectTypeInfo = (POBJECT_TYPE_INFORMATION)Kernel32$HeapAlloc(Kernel32$GetProcessHeap(), HEAP_ZERO_MEMORY, 0x1000);
-        if ( NULL == objectTypeInfo ) {
-            BadgerDispatch(g_dispatch, "[-] Failed to allocate objectTypeInfo\n");
+        if (! objectTypeInfo ) {
+            BadgerDispatch(g_dispatch, "[-] Error HeapAlloc: %lu\n", ERROR_OUTOFMEMORY);
             continue;
         }
         dwErrorCode = (DWORD)Ntdll$NtQueryObject(dupHandle, ObjectTypeInformation, objectTypeInfo, 0x1000, NULL);
-        if (!NT_SUCCESS(dwErrorCode)) {
-            BadgerDispatch(g_dispatch, "[-] Failed to query the object type for handle %#X in pid:%lu (%lu)\n", (UINT)handle.HandleValue, pid, dwErrorCode);
+        if (! NT_SUCCESS(dwErrorCode)) {
+            BadgerDispatch(g_dispatch, "[-] Error NtQueryObject :%lu\n", dwErrorCode);
             continue;
         } 
         // (unless it has an access of 0x0012019f, on which NtQueryObject could hang)
@@ -98,15 +97,15 @@ DWORD ListProcessHandles(DWORD pid) {
             continue;
         }
         objectNameInfo = Kernel32$HeapAlloc(Kernel32$GetProcessHeap(), HEAP_ZERO_MEMORY, 0x1000);
-        if (!objectNameInfo) {
-            BadgerDispatch(g_dispatch, "[-] Failed to allocate objectNameInfo\n");
+        if (! objectNameInfo) {
+            BadgerDispatch(g_dispatch, "[-] Error HeapAlloc: %lu\n", ERROR_OUTOFMEMORY);
             continue;
         }
         dwErrorCode = (DWORD)Ntdll$NtQueryObject(dupHandle, ObjectNameInformation, objectNameInfo, 0x1000, &returnLength);
-        if (!NT_SUCCESS(dwErrorCode)) {
+        if (! NT_SUCCESS(dwErrorCode)) {
             objectNameInfo = Kernel32$HeapReAlloc(Kernel32$GetProcessHeap(), HEAP_ZERO_MEMORY, objectNameInfo, returnLength);
             if ( NULL == objectNameInfo ) {
-                BadgerDispatch(g_dispatch, "[-] Failed to allocate objectNameInfo\n");
+                BadgerDispatch(g_dispatch, "[-] Error HeapAlloc: %lu\n", ERROR_OUTOFMEMORY);
                 continue;
             }
             dwErrorCode = (DWORD)Ntdll$NtQueryObject(dupHandle, ObjectNameInformation, objectNameInfo, returnLength, NULL);
@@ -146,21 +145,15 @@ DWORD ListProcessHandles(DWORD pid) {
         Kernel32$CloseHandle(dupHandle);
         dupHandle = NULL;
     }
-    return dwErrorCode;
 }
 
 void coffee(char ** argv, int argc, WCHAR** dispatch) {
-	DWORD dwErrorCode = ERROR_SUCCESS;
 	DWORD dwPid = 0;
     g_dispatch = dispatch;
-
-	 dwPid = BadgerAtoi(argv[0]);
-     BadgerDispatch(dispatch, "PID: %lu\n", dwPid);
-	 BadgerDispatch(dispatch, "[+] Listing handles for PID:%lu\n", dwPid);
-    dwErrorCode = ListProcessHandles(dwPid);
-    if (ERROR_SUCCESS != dwErrorCode) {
-        BadgerDispatch(dispatch, "[-] ListProcessHandles failed: %lu\n", dwErrorCode);
+    dwPid = BadgerAtoi(argv[0]);
+    if (dwPid == 0) {
+        BadgerDispatch(dispatch, "[-] Invalid PID\n");
         return;
     }
-	return;
+    ListProcessHandles(dwPid);
 }
