@@ -66,9 +66,15 @@ HRESULT AddFirewallRule(BSTR ruleName, BSTR ruleDescription, BSTR ruleGroup, NET
     }
 
 Cleanup:
-    if (pRule) pRule->lpVtbl->Release(pRule);
-    if (pRules) pRules->lpVtbl->Release(pRules);
-    if (pNetFwPolicy2) pNetFwPolicy2->lpVtbl->Release(pNetFwPolicy2);
+    if (pRule) {
+        pRule->lpVtbl->Release(pRule);
+    }
+    if (pRules) {
+        pRules->lpVtbl->Release(pRules);
+    }
+    if (pNetFwPolicy2) {
+        pNetFwPolicy2->lpVtbl->Release(pNetFwPolicy2);
+    }
     Ole32$CoUninitialize();
     return hr;
 }
@@ -84,7 +90,7 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
     g_dispatch = dispatch;
     
     if (argc < 5) {
-	BadgerDispatch(dispatch, "[!] Usage: AddFirewallRule.o <direction:in/out> <port> <rule_name> <group_name> <description>\n [!] Example: AddFirewallRule.o out 8080 MyRule MyGroup Allowing outbound traffic\n");
+	    BadgerDispatch(dispatch, "[!] Usage: AddFirewallRule.o <direction:in/out> <port> <rule_name> <group_name> <description>\n [!] Example: AddFirewallRule.o out 8080 MyRule MyGroup Allowing outbound traffic\n");
     }
     directionOption = argv[0];
     ConvertCharToWChar(argv[1], &w_localPorts);
@@ -100,23 +106,23 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
     BSTR localPorts = OleAut32$SysAllocString(w_localPorts);
     BadgerDispatch(dispatch, "[*] Local Port: %S\n", localPorts);
     if (BadgerStrcmp(directionOption, "in") == 0) {
-	NET_FW_RULE_DIRECTION direction = NET_FW_RULE_DIR_IN;
-	hr = AddFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
-	if (SUCCEEDED(hr)) {
-	    BadgerDispatch(dispatch, "[+] Inbound firewall rule added successfully.\n");
+	    NET_FW_RULE_DIRECTION direction = NET_FW_RULE_DIR_IN;
+	    hr = AddFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
+	    if (SUCCEEDED(hr)) {
+	        BadgerDispatch(dispatch, "[+] Inbound firewall rule added successfully.\n");
         }
         else {
-	    BadgerDispatch(dispatch, "[-] Add failed: %lu\n", Kernel32$GetLastError());
+	        BadgerDispatch(dispatch, "[-] Add failed: %lu\n", Kernel32$GetLastError());
         }
     } 
     else {
-	NET_FW_RULE_DIRECTION direction = NET_FW_RULE_DIR_OUT;
-	hr = AddFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
-	if (SUCCEEDED(hr)) {
-	    BadgerDispatch(dispatch, "[+] Outbound firewall rule added successfully.\n");
+	    NET_FW_RULE_DIRECTION direction = NET_FW_RULE_DIR_OUT;
+	    hr = AddFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
+	    if (SUCCEEDED(hr)) {
+	        BadgerDispatch(dispatch, "[+] Outbound firewall rule added successfully.\n");
         }
         else {
-	    BadgerDispatch(dispatch, "[-] Add failed: %lu\n", Kernel32$GetLastError());
+	        BadgerDispatch(dispatch, "[-] Add failed: %lu\n", Kernel32$GetLastError());
         }
     }
     OleAut32$SysFreeString(ruleName);
