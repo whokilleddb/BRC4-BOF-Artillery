@@ -66,9 +66,15 @@ HRESULT AddFirewallRule(BSTR ruleName, BSTR ruleDescription, BSTR ruleGroup, NET
     }
 
 Cleanup:
-    if (pRule) pRule->lpVtbl->Release(pRule);
-    if (pRules) pRules->lpVtbl->Release(pRules);
-    if (pNetFwPolicy2) pNetFwPolicy2->lpVtbl->Release(pNetFwPolicy2);
+    if (pRule) {
+	pRule->lpVtbl->Release(pRule);
+    }
+    if (pRules) {
+	pRules->lpVtbl->Release(pRules);
+    }
+    if (pNetFwPolicy2) {
+	pNetFwPolicy2->lpVtbl->Release(pNetFwPolicy2);
+    }
     Ole32$CoUninitialize();
     return hr;
 }
