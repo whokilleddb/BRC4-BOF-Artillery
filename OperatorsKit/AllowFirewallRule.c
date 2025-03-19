@@ -1,4 +1,4 @@
-#include <Windows.h>
+#include <windows.h>
 #include <netfw.h>
 #include "../badger_exports.h"
 
@@ -20,7 +20,7 @@ VOID ConvertCharToWChar(char* charString, wchar_t** wcharString) {
     }
 }
 
-HRESULT AddFirewallRule(BSTR ruleName, BSTR ruleDescription, BSTR ruleGroup, NET_FW_RULE_DIRECTION direction, BSTR localPorts, LONG protocol) {
+HRESULT AllowFirewallRule(BSTR ruleName, BSTR ruleDescription, BSTR ruleGroup, NET_FW_RULE_DIRECTION direction, BSTR localPorts, LONG protocol) {
     HRESULT hr = S_OK;
     INetFwPolicy2 *pNetFwPolicy2 = NULL;
     INetFwRules *pRules = NULL;
@@ -28,27 +28,27 @@ HRESULT AddFirewallRule(BSTR ruleName, BSTR ruleDescription, BSTR ruleGroup, NET
 
     hr = Ole32$CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (FAILED(hr)) {
-        BadgerDispatch(g_dispatch, "[-] Error CoInitializeEx %d\n", Kernel32$GetLastError());
-        goto Cleanup;
+        BadgerDispatch(g_dispatch, "[-] Error CoInitializeEx 0x%X\n", hr);
+        goto cleanUp;
     }
     IID CLSIDNetFwPolicy2 = {0xe2b3c97f, 0x6ae1, 0x41ac, {0x81, 0x7a, 0xf6, 0xf9, 0x21, 0x66, 0xd7, 0xdd}};
     IID IIDINetFwPolicy2 = {0x98325047, 0xc671, 0x4174, {0x8d, 0x81, 0xde, 0xfc, 0xd3, 0xf0, 0x31, 0x86}};
     hr = Ole32$CoCreateInstance(&CLSIDNetFwPolicy2, NULL, CLSCTX_INPROC_SERVER, &IIDINetFwPolicy2, (void**)&pNetFwPolicy2);
     if (FAILED(hr)) {
-        BadgerDispatch(g_dispatch, "[-] Error CoCreateInstance of firewall setting manager object: %d\n", Kernel32$GetLastError());
-        goto Cleanup;
+        BadgerDispatch(g_dispatch, "[-] Error CoCreateInstance: 0x%X\n", hr);
+        goto cleanUp;
     }
     hr = pNetFwPolicy2->lpVtbl->get_Rules(pNetFwPolicy2, &pRules);
     if (FAILED(hr)) {
-        BadgerDispatch(g_dispatch, "[-] Error get_Rules: %d\n", Kernel32$GetLastError());
-        goto Cleanup;
+        BadgerDispatch(g_dispatch, "[-] Error get_Rules: 0x%X\n", hr);
+        goto cleanUp;
     }
     IID CLSIDNetFwRule = {0x2c5bc43e, 0x3369, 0x4c33, {0xab, 0x0c, 0xbe, 0x94, 0x69, 0x67, 0x7a, 0xf4}};
     IID IIDINetFwRule = {0xaf230d27, 0xbaba, 0x4e42, {0xac, 0xed, 0xf5, 0x24, 0xf2, 0x2c, 0xfc, 0xe2}};
     hr = Ole32$CoCreateInstance(&CLSIDNetFwRule, NULL, CLSCTX_INPROC_SERVER, &IIDINetFwRule, (void**)&pRule);
     if (FAILED(hr)) {
-        BadgerDispatch(g_dispatch, "[-] Error CoCreateInstance of rule object: %d\n", Kernel32$GetLastError());
-        goto Cleanup;
+        BadgerDispatch(g_dispatch, "[-] Error CoCreateInstance of rule object: 0x%X\n", hr);
+        goto cleanUp;
     }
     pRule->lpVtbl->put_Direction(pRule, direction);
     pRule->lpVtbl->put_Protocol(pRule, protocol);
@@ -61,10 +61,10 @@ HRESULT AddFirewallRule(BSTR ruleName, BSTR ruleDescription, BSTR ruleGroup, NET
     pRule->lpVtbl->put_Enabled(pRule, VARIANT_TRUE);
     hr = pRules->lpVtbl->Add(pRules, pRule);
     if (FAILED(hr)) {
-        BadgerDispatch(g_dispatch, "[-] Error CoCreateInstance for adding rule to firewall: %d\n", Kernel32$GetLastError());
-        goto Cleanup;
+        BadgerDispatch(g_dispatch, "[-] Error CoCreateInstance: 0x%X\n", hr);
+        goto cleanUp;
     }
-Cleanup:
+cleanUp:
     if (pRule) {
         pRule->lpVtbl->Release(pRule);
     }
@@ -87,10 +87,12 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
     WCHAR *w_ruleGroup = NULL;
     WCHAR *w_localPorts = NULL;
     g_dispatch = dispatch;
-    
+
     if (argc < 5) {
-    BadgerDispatch(dispatch, "[!] Usage: AddFirewallRule.o <direction:in/out> <port> <rule_name> <group_name> <description>\n [!] Example: AddFirewallRule.o out 8080 MyRule MyGroup Allowing outbound traffic\n");
+        BadgerDispatch(dispatch, "[!] Usage: AllowFirewallRule.o <direction:in/out> <port> <rule_name> <group_name> <description>\n[!] Example: AllowFirewallRule.o out 8080 MyRule MyGroup Allowing outbound traffic\n");
+        return;
     }
+
     directionOption = argv[0];
     ConvertCharToWChar(argv[1], &w_localPorts);
     ConvertCharToWChar(argv[2], &w_ruleName);
@@ -106,22 +108,16 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
     BadgerDispatch(dispatch, "[*] Local Port: %S\n", localPorts);
     if (BadgerStrcmp(directionOption, "in") == 0) {
         NET_FW_RULE_DIRECTION direction = NET_FW_RULE_DIR_IN;
-        hr = AddFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
+        hr = AllowFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
         if (SUCCEEDED(hr)) {
-            BadgerDispatch(dispatch, "[+] Inbound firewall rule added successfully.\n");
-        }
-        else {
-            BadgerDispatch(dispatch, "[-] Add failed: %lu\n", Kernel32$GetLastError());
+            BadgerDispatch(dispatch, "[+] Inbound firewall rule added successfully\n");
         }
     } 
     else {
         NET_FW_RULE_DIRECTION direction = NET_FW_RULE_DIR_OUT;
-        hr = AddFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
+        hr = AllowFirewallRule(ruleName, ruleDescription, ruleGroup, direction, localPorts, protocol);
         if (SUCCEEDED(hr)) {
-            BadgerDispatch(dispatch, "[+] Outbound firewall rule added successfully.\n");
-        }
-        else {
-            BadgerDispatch(dispatch, "[-] Add failed: %lu\n", Kernel32$GetLastError());
+            BadgerDispatch(dispatch, "[+] Outbound firewall rule added successfully\n");
         }
     }
     OleAut32$SysFreeString(ruleName);

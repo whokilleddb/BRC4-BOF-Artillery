@@ -10,7 +10,8 @@
         "ntsecapi.h": "c",
         "tlhelp32.h": "c",
         "windows.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "stdlib.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled",
     "favorites.resources": []

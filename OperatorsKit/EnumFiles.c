@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "..\badger_exports.h"
+#include "../badger_exports.h"
 
 #define MAX_PREVIEW_LENGTH 200
 
@@ -41,41 +41,36 @@ bool keywordMatches(char* content, char* keyword) {
         if (Msvcrt$strstr(content, tempKeyword)) {
             return true;
         }
-    }
-    else if (keyword[keywordLen - 1] == '*') {
+    } else if (keyword[keywordLen - 1] == '*') {
         char tempKeyword[MAX_PATH]= {0};
         Msvcrt$strncpy(tempKeyword, keyword, keywordLen - 1);
         tempKeyword[keywordLen - 1] = '\0';
         if (MSVCRT$strncmp(content, tempKeyword, keywordLen - 1) == 0) {
             return true;
         }
-    }
-    else if (keyword[0] == '*') {
+    } else if (keyword[0] == '*') {
         subtr = BadgerStrlen(content) - (keywordLen - 1) - 1;
         if (BadgerStrlen(content) >= keywordLen - 1) {
             if (Msvcrt$_strnicmp(content + subtr, keyword + 1, keywordLen-1) == 0) {
                 return true;
-            }
-            else if (BadgerStrcmp(content + subtr + 1, keyword + 1) == 0) {
+            } else if (BadgerStrcmp(content + subtr + 1, keyword + 1) == 0) {
                 return true;
             }
         }
-    }
-    else if (Msvcrt$strstr(content, keyword)) {
+    } else if (Msvcrt$strstr(content, keyword)) {
         return true;
     }
     return false;
-    BadgerDispatch(g_dispatch, "[-] keywordMatches failed %lu\n", Kernel32$GetLastError());
 }
 
 bool SearchFileForKeyword(char* filePath, char* keyword) {
-    DWORD  dwBytesRead = 0;
-    DWORD fileSize=0;
+    DWORD dwBytesRead = 0;
+    DWORD fileSize = 0;
     HANDLE hFile;
     
     hFile = Kernel32$CreateFileA(filePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (!hFile) {
-        BadgerDispatch(g_dispatch, "[-] CreateFileA Failed to open file: %s with error %lu\n", filePath, Kernel32$GetLastError());
+        BadgerDispatch(g_dispatch, "[-] CreateFileA failed to open file: %s with error %lu\n", filePath, Kernel32$GetLastError());
         return false;
     }
     fileSize = Kernel32$GetFileSize(hFile, NULL);
@@ -85,13 +80,13 @@ bool SearchFileForKeyword(char* filePath, char* keyword) {
         return false;
     }
     char* fileContents = (char*)BadgerAlloc(fileSize + 1);
-    
+
     if (!fileContents) {
         BadgerDispatch(g_dispatch, "[-] Failed to allocate memory for file: %s with error %lu\n", filePath, Kernel32$GetLastError());
         return false;
     }
     if (!Kernel32$ReadFile(hFile, fileContents, fileSize, &dwBytesRead, NULL)) {
-        BadgerDispatch(g_dispatch, "\n[-] ReadFile failed: %lu\n", Kernel32$GetLastError());
+        BadgerDispatch(g_dispatch, "[-] ReadFile failed: %lu\n", Kernel32$GetLastError());
         BadgerFree((PVOID*)&fileContents);
         if(!Kernel32$CloseHandle(hFile)) {
             BadgerDispatch(g_dispatch, "[-] Failed to close the file handle %lu\n", Kernel32$GetLastError());
@@ -99,9 +94,7 @@ bool SearchFileForKeyword(char* filePath, char* keyword) {
         return false;
     }
     fileContents[dwBytesRead] = '\0';  
-    if (!Kernel32$CloseHandle(hFile)) {
-        BadgerDispatch(g_dispatch, "[-] Failed to close the file handle %lu\n", Kernel32$GetLastError());
-    }
+    Kernel32$CloseHandle(hFile);
     for (long i = 0; i < dwBytesRead; i++) {
         fileContents[i] = Msvcrt$tolower(fileContents[i]);
     }
@@ -141,12 +134,13 @@ bool SearchFileForKeyword(char* filePath, char* keyword) {
     return found;
 }
 
-void SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) {
+BOOL SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) {
+    BOOL found = FALSE;
     WIN32_FIND_DATAA findFileData;
     HANDLE hFind = INVALID_HANDLE_VALUE;
     char szDir[MAX_PATH] = { 0 };
+    char subDir[MAX_PATH] = { 0 };
     DWORD dwError;
-    char subDir[MAX_PATH];
 
     BadgerMemcpy(szDir, lpFolder, BadgerStrlen(lpFolder)+1);
     if (szDir[BadgerStrlen(szDir)-1] != '\\') {
@@ -156,6 +150,7 @@ void SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) 
     hFind = Kernel32$FindFirstFileA(szDir, &findFileData);
     if (!hFind) {
         BadgerDispatch(g_dispatch, "FindFirstFileA Error %lu\n", Kernel32$GetLastError());
+        return FALSE;
     }
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
@@ -166,8 +161,11 @@ void SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) 
                 } else {
                     Msvcrt$sprintf(fullPath, "%s%s", lpFolder, findFileData.cFileName);
                 }
-                if (*keyword) { 
-                    SearchFileForKeyword(fullPath, keyword);
+                if (*keyword) {
+                    BOOL currentFind = SearchFileForKeyword(fullPath, keyword);
+                    if (! found) {
+                        found = currentFind;
+                    }
                 } else if (!*keyword) {
                     BadgerDispatch(g_dispatch, "[+] File found: %s\n", fullPath);
                 }
@@ -179,12 +177,14 @@ void SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) 
         }
         Kernel32$FindClose(hFind);
     }
+
     BadgerMemset(szDir, 0, MAX_PATH);
     BadgerMemcpy(szDir, lpFolder, BadgerStrlen(lpFolder)+1);
     Msvcrt$strcat(szDir, "\\*");
     hFind = Kernel32$FindFirstFileA(szDir, &findFileData);
     if (!hFind) {
         BadgerDispatch(g_dispatch, "FindFirstFileA Error %lu\n", Kernel32$GetLastError());
+        return FALSE;
     }
     if (hFind != INVALID_HANDLE_VALUE) {
         do {
@@ -197,8 +197,6 @@ void SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) 
                     Msvcrt$strcat(subDir, "\\");
                 }
                 Msvcrt$strcat(subDir, findFileData.cFileName);
-                int i=1;
-                i++;
                 SearchFilesRecursive(subDir, lpSearchPattern, keyword);
             }
         } while (Kernel32$FindNextFileA(hFind, &findFileData) != 0);
@@ -208,6 +206,7 @@ void SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) 
         }
         Kernel32$FindClose(hFind);
     }
+    return found;
 }
 
 void coffee(char** argv, int argc, WCHAR** dispatch) {
@@ -215,21 +214,23 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
     char *lpSearchPattern = NULL;
     char *keyword = NULL;
     g_dispatch = dispatch;
-
-    if (argc<2) {
-        BadgerDispatch(dispatch, "[!] Usage: EnumFiles.o <path to directory> <search pattern> <(optional)keyword>\n Examples: \n 1. EnumFiles.o C:\\Users\\RTO\\Documents *.xlsx \n 2. EnumFiles.o C:\\Users\\RTO *login*.* username\n 3. EnumFiles.o C:\\Users\\RTO *.txt *pass*\n");
+    if (argc < 2) {
+        BadgerDispatch(dispatch, "[!] Usage: EnumFiles.o <path to directory> <search pattern> <(optional)keyword>\nExamples: \n1. EnumFiles.o C:\\Users\\RTO\\Documents *.xlsx \n2. EnumFiles.o C:\\Users\\RTO *login*.* username\n3. EnumFiles.o C:\\Users\\RTO *.txt *pass*\n");
         return;
     }
     lpDirectory = argv[0];
     lpSearchPattern = argv[1];
     BadgerDispatch(dispatch, "[*] Directory: %s\n", lpDirectory);
     BadgerDispatch(dispatch, "[*] SearchPattern: %s\n", lpSearchPattern);
-    if (argc=3) {
+    if (argc == 3) {
         keyword = argv[2];
         BadgerDispatch(dispatch, "[*] keyword: %s\n", keyword);
     }
-    BadgerDispatch(dispatch, "[+] File Search Results\n");
-    SearchFilesRecursive(lpDirectory, lpSearchPattern, keyword);
-    BadgerDispatch(dispatch, "[+] Success\n");
+    BadgerDispatch(dispatch, "[+] Search Results:\n");
+    if (SearchFilesRecursive(lpDirectory, lpSearchPattern, keyword)) {
+        BadgerDispatch(dispatch, "[+] Success\n");
+        return;
+    }
+    BadgerDispatch(dispatch, "[-] No results found\n");
     return;
 }
