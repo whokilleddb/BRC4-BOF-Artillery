@@ -25,3 +25,8 @@ Original Source: https://github.com/trustedsec/CS-Remote-OPs-BOF
 Original Source: https://github.com/trustedsec/CS-Situational-Awareness-BOF
 
 View [README](BR-Remote-Ops/README.md) for Kerbeus Repo
+
+## Operators-Kit
+Original Source: https://github.com/REDMED-X/OperatorsKit
+
+View [README](OperatorsKit/README.md) for Operators Kit Repo
