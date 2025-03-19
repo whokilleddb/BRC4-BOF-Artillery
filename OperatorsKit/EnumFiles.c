@@ -149,7 +149,7 @@ BOOL SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) 
     Msvcrt$strcat(szDir, lpSearchPattern);
     hFind = Kernel32$FindFirstFileA(szDir, &findFileData);
     if (!hFind) {
-        BadgerDispatch(g_dispatch, "FindFirstFileA Error %lu\n", Kernel32$GetLastError());
+        BadgerDispatch(g_dispatch, "[-] FindFirstFileA Error %lu\n", Kernel32$GetLastError());
         return FALSE;
     }
     if (hFind != INVALID_HANDLE_VALUE) {
@@ -183,7 +183,7 @@ BOOL SearchFilesRecursive(char* lpFolder, char* lpSearchPattern, char* keyword) 
     Msvcrt$strcat(szDir, "\\*");
     hFind = Kernel32$FindFirstFileA(szDir, &findFileData);
     if (!hFind) {
-        BadgerDispatch(g_dispatch, "FindFirstFileA Error %lu\n", Kernel32$GetLastError());
+        BadgerDispatch(g_dispatch, "[-] FindFirstFileA Error %lu\n", Kernel32$GetLastError());
         return FALSE;
     }
     if (hFind != INVALID_HANDLE_VALUE) {
