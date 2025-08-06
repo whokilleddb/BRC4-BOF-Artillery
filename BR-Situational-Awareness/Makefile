@@ -7,6 +7,7 @@ SRC=src
 
 all:
 	$(MAKE) dir
+	$(MAKE) driversigs
 	$(MAKE) enum_filter_driver
 
 bof:
@@ -14,14 +15,15 @@ bof:
 	@mkdir -p bofs/
 	@mv *.o ./bofs/
 
-enum_filter_driver:
-	$(MAKE) TARGET=enum_filter_driver bof
-
 dir:
 	$(MAKE) TARGET=dir bof
 
 driversigs:
-    $(MAKE) TARGET=driversigs bof
+	$(MAKE) TARGET=driversigs bof
+
+enum_filter_driver:
+	$(MAKE) TARGET=enum_filter_driver bof
+
 
 clean:
 	@rm -rf ../bofs

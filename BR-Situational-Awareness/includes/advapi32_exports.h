@@ -1,21 +1,28 @@
 #pragma once
 #include "common.h"
 
-#define AdjustTokenPrivileges Advapi32$AdjustTokenPrivileges
-#define CloseServiceHandle Advapi32$CloseServiceHandle
-#define CredBackupCredentials Advapi32$CredBackupCredentials
-#define CreateProcessAsUserW Advapi32$CreateProcessAsUserW
-#define CryptAcquireContextA Advapi32$CryptAcquireContextA
-#define CryptAcquireContextW Advapi32$CryptAcquireContextW
-#define CryptCreateHash Advapi32$CryptCreateHash
-#define CryptHashData Advapi32$CryptHashData
-#define CryptDestroyHash Advapi32$CryptDestroyHash
-#define CryptGetHashParam Advapi32$CryptGetHashParam
-#define CryptReleaseContext Advapi32$CryptReleaseContext
+#ifndef __ADVAPI_H__
+#define __ADVAPI_H__
+
+#define AdjustTokenPrivileges       Advapi32$AdjustTokenPrivileges
+#define CloseServiceHandle          Advapi32$CloseServiceHandle
+#define CredBackupCredentials       Advapi32$CredBackupCredentials
+#define CreateProcessAsUserW        Advapi32$CreateProcessAsUserW
+#define CryptAcquireContextA        Advapi32$CryptAcquireContextA
+#define CryptAcquireContextW        Advapi32$CryptAcquireContextW
+#define CryptCreateHash             Advapi32$CryptCreateHash
+#define CryptHashData               Advapi32$CryptHashData
+#define CryptDestroyHash            Advapi32$CryptDestroyHash
+#define CryptGetHashParam           Advapi32$CryptGetHashParam
+#define CryptReleaseContext         Advapi32$CryptReleaseContext
+
 #define DuplicateTokenEx Advapi32$DuplicateTokenEx
+
+#define EnumServicesStatusExW Advapi32$EnumServicesStatusExW
 #define EventRegister Advapi32$EventRegister
 #define EventUnregister Advapi32$EventUnregister
 #define EventWrite Advapi32$EventWrite
+
 #define GetSidSubAuthority Advapi32$GetSidSubAuthority
 #define GetSidSubAuthorityCount Advapi32$GetSidSubAuthorityCount
 #define GetTokenInformation Advapi32$GetTokenInformation
@@ -34,8 +41,10 @@
 #define RegCloseKey         Advapi32$RegCloseKey
 #define RegConnectRegistryA Advapi32$RegConnectRegistryA
 #define RegOpenKeyExA       Advapi32$RegOpenKeyExA
+#define RegOpenKeyExW       Advapi32$RegOpenKeyExW
 #define RegEnumKeyExA       Advapi32$RegEnumKeyExA
 #define RegQueryValueExA    Advapi32$RegQueryValueExA
+#define RegQueryValueExW    Advapi32$RegQueryValueExW
 
 #define SetTokenInformation Advapi32$SetTokenInformation
 #define SystemFunction032 Advapi32$SystemFunction032
@@ -80,6 +89,7 @@ WINADVAPI WINAPI BOOL      Advapi32$CryptReleaseContext(HCRYPTPROV hProv, DWORD 
 
 WINADVAPI WINAPI BOOL      Advapi32$DuplicateTokenEx(HANDLE hExistingToken, DWORD dwDesiredAccess, LPSECURITY_ATTRIBUTES lpTokenAttributes, SECURITY_IMPERSONATION_LEVEL ImpersonationLevel, TOKEN_TYPE TokenType, PHANDLE phNewToken);
 
+WINADVAPI WINAPI BOOL      Advapi32$EnumServicesStatusExW(SC_HANDLE hSCManager, SC_ENUM_TYPE InfoLevel, DWORD dwServiceType, DWORD dwServiceState, LPBYTE lpServices, DWORD cbBufSize, LPDWORD pcbBytesNeeded, LPDWORD lpServicesReturned, LPDWORD lpResumeHandle, LPCWSTR pszGroupName);
 WINADVAPI WINAPI ULONG     Advapi32$EventRegister(LPCGUID ProviderId, PENABLECALLBACK EnableCallback, PVOID CallbackContext, PREGHANDLE RegHandle);
 WINADVAPI WINAPI ULONG     Advapi32$EventUnregister(REGHANDLE RegHandle);
 WINADVAPI WINAPI ULONG     Advapi32$EventWrite(REGHANDLE RegHandle, PEVENT_DESCRIPTOR EventDescriptor, ULONG UserDataCount, PEVENT_DATA_DESCRIPTOR UserData);
@@ -110,7 +120,12 @@ WINADVAPI WINAPI LSTATUS   Advapi32$RegEnumKeyExA(HKEY hKey, DWORD dwIndex, LPST
 WINADVAPI WINAPI LSTATUS   Advapi32$RegQueryValueExA(HKEY    hKey, LPCSTR  lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE  lpData, LPDWORD lpcbData);
 
 WINADVAPI WINAPI LSTATUS   Advapi32$RegOpenKeyExA(HKEY   hKey, LPCSTR lpSubKey, DWORD  ulOptions, REGSAM samDesired, PHKEY  phkResult);
+WINADVAPI WINAPI LSTATUS   Advapi32$RegOpenKeyExW(HKEY   hKey, LPCWSTR lpSubKey, DWORD  ulOptions, REGSAM samDesired, PHKEY  phkResult);
+WINADVAPI WINAPI LSTATUS   Advapi32$RegQueryValueExW(HKEY hKey, LPCWSTR lpValueName, LPDWORD lpReserved, LPDWORD lpType, LPBYTE lpData, LPDWORD lpcbData);
+
 
 WINADVAPI WINAPI BOOL      Advapi32$SetTokenInformation(HANDLE TokenHandle, TOKEN_INFORMATION_CLASS TokenInformationClass, LPVOID TokenInformation, DWORD TokenInformationLength);
 WINADVAPI WINAPI NTSTATUS  Advapi32$SystemFunction032(PPVOID_STRING source, PPVOID_STRING key);
-WINADVAPI WINAPI ULONG      Advapi32$I_QueryTagInformation(PVOID, SC_SERVICE_TAG_QUERY_TYPE, PSC_SERVICE_TAG_QUERY);
+WINADVAPI WINAPI ULONG     Advapi32$I_QueryTagInformation(PVOID, SC_SERVICE_TAG_QUERY_TYPE, PSC_SERVICE_TAG_QUERY);
+
+#endif
