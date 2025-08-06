@@ -3,13 +3,13 @@ CFLAGS=-m64 -Os -s -pedantic -nostdlib -fno-jump-tables -fdiagnostics-color=alwa
 INCLUDES=includes/
 SRC=src
 
-.PHONY: all clean 
+.PHONY: all clean
 
 all:
 	$(MAKE) dir
 	$(MAKE) enum_filter_driver
 
-bof: 
+bof:
 	$(CC) $(CFLAGS) -I $(INCLUDES) -o $(TARGET).o $(SRC)/$(TARGET).c
 	@mkdir -p bofs/
 	@mv *.o ./bofs/
@@ -20,5 +20,8 @@ enum_filter_driver:
 dir:
 	$(MAKE) TARGET=dir bof
 
+driversigs:
+    $(MAKE) TARGET=driversigs bof
+
 clean:
-	@rm -rf ../bofs 
+	@rm -rf ../bofs
