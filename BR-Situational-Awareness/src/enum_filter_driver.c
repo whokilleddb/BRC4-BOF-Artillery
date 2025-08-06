@@ -1,6 +1,6 @@
 #include "common.h"
 
-#define SZ_SERVICE_KEY "SYSTEM\\CurrentControlSet\\Services"
+#define SZ_SERVICE_KEY "a"
 #define SZ_INSTANCE_KEY "Instances"
 #define SZ_ALTITUDE_VALUE "Altitude"
 
@@ -77,42 +77,42 @@ void Enum_Filter_Driver(LPCSTR szHostName) {
             NTEPRINT("RegOpenKeyExA", status);
             break;
         }
-        
+
         PRINT("\n");
 
         // loop through all service subkeys
         status = RegEnumKeyExA(
             hRootKey,          // Root key
-            dwServiceKeyIndex, 
-            szServiceKeyName, 
-            &dwServiceKeyNameCount, 
-            NULL, 
-            NULL, 
-            NULL, 
+            dwServiceKeyIndex,
+            szServiceKeyName,
+            &dwServiceKeyNameCount,
+            NULL,
+            NULL,
+            NULL,
             NULL);
 
         while ( status != ERROR_NO_MORE_ITEMS ) {
-            // Open service subkey 
+            // Open service subkey
             status = RegOpenKeyExA(
-                hRootKey, 
+                hRootKey,
                 szServiceKeyName,
                 0,
-                KEY_READ, 
+                KEY_READ,
                 &hServiceKey
             );
             if (status == ERROR_SUCCESS) {
-                
+
                 // open service subkey's Instances subkey
-                status = RegOpenKeyExA(hServiceKey, SZ_INSTANCE_KEY, 0, KEY_READ, &hInstanceKey); 
+                status = RegOpenKeyExA(hServiceKey, SZ_INSTANCE_KEY, 0, KEY_READ, &hInstanceKey);
                 if (status == ERROR_SUCCESS) {
                     // loop through all instances subkeys
 
                     dwInstancesSubkeyIndex = 0;
                     status = RegEnumKeyExA(hInstanceKey, dwInstancesSubkeyIndex, szInstancesSubkeyName, &dwInstancesSubkeyNameCount, NULL, NULL, NULL, NULL);
-                    
+
                     while ( status != ERROR_NO_MORE_ITEMS ) {
                         // open instances subkey
-                        status = RegOpenKeyExA(hInstanceKey, szInstancesSubkeyName, 0, KEY_READ, &hInstanceSubkey); 
+                        status = RegOpenKeyExA(hInstanceKey, szInstancesSubkeyName, 0, KEY_READ, &hInstanceSubkey);
                         if (ERROR_SUCCESS == status) {
                             // query for altitude value
                             status = RegQueryValueExA(hInstanceSubkey, SZ_ALTITUDE_VALUE, NULL, &dwAltitudeValueType, (unsigned char*)szAltitudeValue, &dwAltitudeValueCount);
@@ -120,18 +120,20 @@ void Enum_Filter_Driver(LPCSTR szHostName) {
                                 // PRINT("[+] Opened service subkey: %s\n", szServiceKeyName);
                                 // PRINT("[+] Opened instances subkey: %s\n", szInstancesSubkeyName);
                                 dwAltitudeValue = strtoul(szAltitudeValue, NULL, 10);
+
+                                // See: https://learn.microsoft.com/en-us/windows-hardware/drivers/ifs/allocated-altitudes
                                 if ( (dwAltitudeValue >= 360000) && (dwAltitudeValue <= 389999)) PRINT("[+] activitymonitor [Service Name: %s, Altitude: %lu]\n", szServiceKeyName, dwAltitudeValue);
                                 if ( (dwAltitudeValue >= 320000) && (dwAltitudeValue <= 329999)) PRINT("[+] antivirus [Service Name: %s, Altitude: %lu]\n", szServiceKeyName, dwAltitudeValue);
                                 if ( (dwAltitudeValue >= 260000) && (dwAltitudeValue <= 269999) ) PRINT("[+] contentscreener [Service Name: %s, Altitude: %lu]\n", szServiceKeyName, dwAltitudeValue);
                             }
-                        
+
                             else {
                                 NTEPRINT("RegQueryValueExA", status);
                             }
 
                             intZeroMemory(szAltitudeValue, MAX_PATH);
                             dwAltitudeValueCount = MAX_PATH;
-                        }// end if open instances subkey was successful 
+                        }// end if open instances subkey was successful
 
                         else {
                             NTEPRINT("RegOpenKeyExA", status);
@@ -167,7 +169,7 @@ void Enum_Filter_Driver(LPCSTR szHostName) {
     } while(FALSE);
 
     if (status == ERROR_NO_MORE_ITEMS) PRINT("\n[+] Parsed all registry keys!\n");
-    
+
 
     // cleanup here
     if (szAltitudeValue)        intFree(szAltitudeValue);
@@ -186,6 +188,18 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
     g_dispatch = dispatch;
 
     LPCSTR szHostName = NULL;
+
+    // Check for help flag
+    if (argc == 1) {
+      if (
+            (BadgerStrcmp(argv[0], "-h") == 0) ||
+            (BadgerStrcmp(argv[0], "--help") == 0) ||
+            (BadgerStrcmp(argv[0], "/?") == 0)
+        ) {
+        usage();
+        return;
+        }
+    }
 
     if (argc > 1) {
         usage();

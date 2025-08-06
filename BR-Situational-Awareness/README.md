@@ -5,3 +5,4 @@ This repository contains a collection of BRC4 BOFs ported from [CS-Situational-A
 | CS-Situational-Awareness-BOF | Description | BRC4 Equivalent | Notes |
 |:-----------------------------| :-----------| :---------------|:-------|
 | dir                          | dir [directory] [/s]           |  BOFF Implemented!               | List files in a directory. Supports wildcards (e.g. "C:\Windows\S*") unlike the BRC4 `ls` command <br> Use `coffexec dir.o /?` to print help |
+| enum_filter_driver           | enum_filter_driver [opt:computer] | BOFF Implemented!             | Enumerate filter drivers. <br> Use `coffexec enum_filter_driver.o /?` to print help |
