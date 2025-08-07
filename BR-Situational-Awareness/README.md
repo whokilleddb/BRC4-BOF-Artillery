@@ -13,3 +13,4 @@ Most BOFs support the `-h`/`--help`/`/?` flag to print help
 | enum_filter_driver           | BOFF Implemented!   | enum_filter_driver [opt:computer] | Enumerate filter drivers. |
 | enumLocalSessions | Closely implemented by `local_session` command | `local_session` | Enumerate currently attached user sessions both local and over RDP |
 | env | Can be achieved by `get` command | `get env` | List process environment variables |
+| findLoadedModule | BOFF Implemented | `findLoadedModule [modulepart] [opt:procnamepart]` | findLoadedModule [modulepart] [opt:procnamepart]	Find what processes *modulepart* are loaded into, optionally searching just *procnamepart* | 
