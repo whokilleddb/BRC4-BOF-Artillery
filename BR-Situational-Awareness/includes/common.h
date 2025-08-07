@@ -13,12 +13,14 @@
 #include <math.h>
 #include <wbemidl.h>
 #include <oleauto.h>
+#include <imagehlp.h>
 #include <pla.h>
 #include <proofofpossessioncookieinfo.h>
 #include <combaseapi.h>
 #include <stdio.h>
 #include <ntsecapi.h>
 #include <evntprov.h>
+#include <wincrypt.h>
 
 #include "badger_exports.h"
 #include "lmjoin_exports.h"
@@ -31,3 +33,5 @@
 #include "psapi_exports.h"
 #include "shlwapi_exports.h"
 #include "version_exports.h"
+#include "imagehlp_exports.h"
+#include "crypt32_exports.h"

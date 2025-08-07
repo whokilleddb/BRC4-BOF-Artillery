@@ -5,7 +5,9 @@
 #define 	NT_SUCCESS(Status)   (((NTSTATUS)(Status)) >= 0)
 #endif
 
-#define NtQueryInformationProcess   Ntdll$NtQueryInformationProcess
+#define NtQueryInformationProcess           Ntdll$NtQueryInformationProcess
+#define NtCreateFile                        Ntdll$NtCreateFile
+#define NtClose                             Ntdll$NtClose
 
 // NT Function headers
 __declspec(dllimport) __stdcall NTSTATUS Ntdll$NtOpenProcessToken(HANDLE ProcessHandle, ACCESS_MASK DesiredAccess, PHANDLE TokenHandle);
@@ -22,7 +24,7 @@ __declspec(dllimport) __stdcall NTSTATUS Ntdll$NtResumeThread(HANDLE ThreadHandl
 __declspec(dllimport) __stdcall NTSTATUS Ntdll$NtSuspendThread(HANDLE ThreadHandle, PULONG SuspendCount);  
 __declspec(dllimport) __stdcall NTSTATUS Ntdll$NtTerminateThread(HANDLE ThreadHandle, NTSTATUS ExitStatus );
 __declspec(dllimport) __stdcall NTSTATUS Ntdll$NtUpdateWnfStateData(void* StateName, void* Buffer, unsigned long Length, void* TypeId, void* ExplicitScope, unsigned long MatchingChangeStamp, unsigned long CheckStamp);
-
+__declspec(dllimport) __stdcall NTSTATUS Ntdll$NtCreateFile(PHANDLE FileHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, PIO_STATUS_BLOCK   IoStatusBlock, PLARGE_INTEGER AllocationSize, ULONG FileAttributes, ULONG ShareAccess, ULONG CreateDisposition, ULONG CreateOptions, PVOID EaBuffer, ULONG EaLength);
 
 // typedef ULONG(__stdcall* Etw_Event_Write_No_Registration)(_In_ LPCGUID ProviderId, _In_ PCEVENT_DESCRIPTOR EventDescriptor, _In_ ULONG UserDataCount, _In_reads_opt_(UserDataCount) PEVENT_DATA_DESCRIPTOR UserData);
 typedef struct in6_addr in6_addr;

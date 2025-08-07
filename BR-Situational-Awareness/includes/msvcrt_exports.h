@@ -1,6 +1,9 @@
 #pragma once
 #include "common.h"
 
+#ifndef __MSVCRT_H__
+#define __MSVCRT_H__
+
 #define intZeroMemory(addr,size) Msvcrt$memset((addr),0,size)
 
 // Headers to make life easier
@@ -44,7 +47,9 @@
 
 #define towlower                Msvcrt$towlower
 
+#define wcscat                  Msvcrt$wcscat
 #define wcschr                  Msvcrt$wcschr
+#define wcsncat                 Msvcrt$wcsncat
 #define wcscmp                  Msvcrt$wcscmp
 #define wcslen                  Msvcrt$wcslen
 #define wcsncpy                 Msvcrt$wcsncpy
@@ -94,9 +99,13 @@ WINADVAPI WINAPI char *         Msvcrt$strncat(char *strDest, const char *strSou
 
 WINADVAPI WINAPI int        Msvcrt$towlower(wint_t c);
 
+WINADVAPI WINAPI wchar_t *  Msvcrt$wcscat(wchar_t *strDestination, const wchar_t *strSource);
 WINADVAPI WINAPI wchar_t *  Msvcrt$wcschr(const wchar_t *str, wchar_t c);
 WINADVAPI WINAPI int        Msvcrt$wcscmp(const wchar_t *string1, const wchar_t *string2);
 WINADVAPI WINAPI size_t     Msvcrt$wcslen(const wchar_t *str);
 WINADVAPI WINAPI wchar_t *  Msvcrt$wcsncpy(wchar_t *strDest, const wchar_t *strSource, size_t count);
+WINADVAPI WINAPI wchar_t *  Msvcrt$wcsncat(wchar_t *strDest, const wchar_t *strSource, size_t count);
 WINADVAPI WINAPI wchar_t*   Msvcrt$wcsstr(const wchar_t *str, const wchar_t *strSearch);
 WINADVAPI WINAPI errno_t    Msvcrt$wcsncpy_s(wchar_t *strDest, size_t numberOfElements, const wchar_t *strSource, size_t count);
+
+#endif

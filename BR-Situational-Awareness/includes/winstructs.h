@@ -13,6 +13,15 @@ typedef struct _PEB_LDR_DATA {
     LIST_ENTRY InInitializationOrderModuleList;
 } PEB_LDR_DATA, * PPEB_LDR_DATA;
 
+typedef struct _IO_STATUS_BLOCK {
+    union
+    {
+        NTSTATUS Status;
+        PVOID Pointer;
+    };
+    ULONG_PTR Information;
+} IO_STATUS_BLOCK, * PIO_STATUS_BLOCK;
+
 // typedef struct _UNICODE_STRING {
 //     USHORT Length;
 //     USHORT MaximumLength;

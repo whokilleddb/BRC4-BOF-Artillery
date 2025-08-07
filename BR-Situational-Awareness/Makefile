@@ -6,22 +6,28 @@ SRC=src
 .PHONY: all clean
 
 all:
-	$(MAKE) dir
-	$(MAKE) enum_filter_driver
+	$(MAKE) TARGET=dir bof
+	$(MAKE) TARGET=driversigs bof
+	$(MAKE) TARGET=enum_filter_driver bof
+	$(MAKE) TARGET=findLoadedModule bof
+
 
 bof:
 	$(CC) $(CFLAGS) -I $(INCLUDES) -o $(TARGET).o $(SRC)/$(TARGET).c
 	@mkdir -p bofs/
 	@mv *.o ./bofs/
 
-enum_filter_driver:
-	$(MAKE) TARGET=enum_filter_driver bof
-
 dir:
 	$(MAKE) TARGET=dir bof
 
 driversigs:
-    $(MAKE) TARGET=driversigs bof
+	$(MAKE) TARGET=driversigs bof
+
+enum_filter_driver:
+	$(MAKE) TARGET=enum_filter_driver bof
+
+findLoadedModule:
+	$(MAKE) TARGET=findLoadedModule bof
 
 clean:
 	@rm -rf ../bofs
