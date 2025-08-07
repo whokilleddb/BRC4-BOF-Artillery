@@ -245,8 +245,7 @@ void enumerate_loaded_drivers() {
 			{
 				//BeaconPrintf(CALLBACK_ERROR, "ADVAPI32$RegQueryValueExW failed. (%lu)\n", dwResult);
 				//goto fail;
-				BadgerDispatch(g_dispatch, "[-] RegQueryValueExW() failed at %s:%d with error: %ld\n", __FILE__, __LINE__, lstatus);
-				EPRINT("[-] Failed to get ImagePath for %S\n", service->lpServiceName);
+				EPRINT("[-] Failed to get ImagePath for %S [RegQueryValueExW() failed at %s:%d with error: %ld]\n", service->lpServiceName, __FILE__, __LINE__, lstatus);
 				dwResult = ERROR_SUCCESS;
 			}
 			else
@@ -254,7 +253,7 @@ void enumerate_loaded_drivers() {
 				// Validate the driver
 				if (!validate_driver(driver_path))
 				{
-					EPRINT("[-] validate_driver() failed for %S\n", driver_path);
+					// EPRINT("[-] validate_driver() failed for %S\n", driver_path);
 				}
 			}
 
