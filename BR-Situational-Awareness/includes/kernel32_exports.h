@@ -46,6 +46,9 @@
 #define LocalAlloc                          Kernel32$LocalAlloc
 #define LocalFree                           Kernel32$LocalFree
 
+#define Module32First                       Kernel32$Module32First
+#define Module32Next                        Kernel32$Module32Next
+
 #define MultiByteToWideChar Kernel32$MultiByteToWideChar
 #define QueryDosDeviceW Kernel32$QueryDosDeviceW
 #define OpenProcess Kernel32$OpenProcess
@@ -119,6 +122,9 @@ WINADVAPI WINAPI HLOCAL   Kernel32$LocalAlloc(_In_ UINT   uFlags, _In_ SIZE_T uB
 WINADVAPI WINAPI HLOCAL   Kernel32$LocalFree(_In_ HLOCAL hMem);
 
 WINADVAPI WINAPI int      Kernel32$MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr, int cchWideChar);
+WINADVAPI WINAPI BOOL     Kernel32$Module32First(HANDLE hSnapshot, LPMODULEENTRY32 lpme);
+WINADVAPI WINAPI BOOL     Kernel32$Module32Next(HANDLE hSnapshot, LPMODULEENTRY32 lpme);
+
 WINADVAPI WINAPI DWORD    Kernel32$QueryDosDeviceW(_In_opt_ LPCWSTR lpDeviceName, _Out_ LPWSTR  lpTargetPath, _In_ DWORD ucchMax);
 
 WINADVAPI WINAPI HANDLE   Kernel32$OpenProcess(_In_ DWORD dwDesiredAccess, _In_ BOOL bInheritHandle, _In_ DWORD dwProcessId);
