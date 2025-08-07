@@ -11,3 +11,5 @@ Most BOFs support the `-h`/`--help`/`/?` flag to print help
 | dir                          |  BOFF Implemented! | dir [directory] [/s]               | List files in a directory. Supports wildcards (e.g. "C:\Windows\S*") unlike the BRC4 `ls` command |
 | driversigs                   | BOFF Implemented!   | driversigs            | Enumerate installed services Imagepaths to check the signing cert against known AV/EDR vendors |
 | enum_filter_driver           | BOFF Implemented!   | enum_filter_driver [opt:computer] | Enumerate filter drivers. |
+| enumLocalSessions | Closely implemented by `local_session` command | `local_session` | Enumerate currently attached user sessions both local and over RDP |
+| env | Can be achieved by `get` command | `get env` | List process environment variables |
