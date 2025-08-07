@@ -10,7 +10,7 @@ all:
 	$(MAKE) TARGET=driversigs bof
 	$(MAKE) TARGET=enum_filter_driver bof
 	$(MAKE) TARGET=findLoadedModule bof
-
+	$(MAKE) TARGET=aadjoininfo bof
 
 bof:
 	$(CC) $(CFLAGS) -I $(INCLUDES) -o $(TARGET).o $(SRC)/$(TARGET).c
@@ -28,6 +28,9 @@ enum_filter_driver:
 
 findLoadedModule:
 	$(MAKE) TARGET=findLoadedModule bof
+
+aadjoininfo:
+	$(MAKE) TARGET=aadjoininfo bof
 
 clean:
 	@rm -rf ../bofs
