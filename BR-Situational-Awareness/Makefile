@@ -11,6 +11,7 @@ all:
 	$(MAKE) TARGET=enum_filter_driver bof
 	$(MAKE) TARGET=findLoadedModule bof
 	$(MAKE) TARGET=aadjoininfo bof
+	$(MAKE) TARGET=locale bof
 
 bof:
 	$(CC) $(CFLAGS) -I $(INCLUDES) -o $(TARGET).o $(SRC)/$(TARGET).c
@@ -31,6 +32,9 @@ findLoadedModule:
 
 aadjoininfo:
 	$(MAKE) TARGET=aadjoininfo bof
+
+localte:
+	$(MAKE) TARGET=locale bof
 
 clean:
 	@rm -rf ../bofs

@@ -26,7 +26,10 @@
 #define FreeLibrary                         Kernel32$FreeLibrary
 
 #define GetCurrentProcessId                 Kernel32$GetCurrentProcessId
+#define GetDateFormatEx                     Kernel32$GetDateFormatEx
+
 #define GetFileAttributesW                  Kernel32$GetFileAttributesW
+#define GetLocaleInfoEx                     Kernel32$GetLocaleInfoEx
 #define GetFileSize                         Kernel32$GetFileSize
 #define GetFileSizeEx                       Kernel32$GetFileSizeEx
 #define GetLastError                        Kernel32$GetLastError
@@ -37,6 +40,7 @@
 #define GlobalAlloc                         Kernel32$GlobalAlloc
 #define GlobalFree                          Kernel32$GlobalFree
 #define GetSystemInfo                       Kernel32$GetSystemInfo
+#define GetSystemDefaultLocaleName          Kernel32$GetSystemDefaultLocaleName
 
 #define InitializeCriticalSection           Kernel32$InitializeCriticalSection
 #define IsWow64Process                      Kernel32$IsWow64Process
@@ -45,6 +49,7 @@
 #define LoadLibraryA                        Kernel32$LoadLibraryA
 #define LocalAlloc                          Kernel32$LocalAlloc
 #define LocalFree                           Kernel32$LocalFree
+#define LocaleNameToLCID                    Kernel32$LocaleNameToLCID
 
 #define Module32First                       Kernel32$Module32First
 #define Module32Next                        Kernel32$Module32Next
@@ -98,6 +103,9 @@ WINADVAPI WINAPI BOOL     Kernel32$FindNextFileA(HANDLE, LPWIN32_FIND_DATAA);
 WINADVAPI WINAPI BOOL     Kernel32$FreeLibrary(_In_ HMODULE hLibModule);
 
 WINADVAPI WINAPI DWORD    Kernel32$GetCurrentProcessId();
+WINADVAPI WINAPI int      Kernel32$GetDateFormatEx(LPCWSTR lpLocaleName, DWORD dwFlags, const SYSTEMTIME *lpDate,LPCWSTR lpFormat, LPWSTR lpDateStr, int cchDate, LPCWSTR lpCalendar);
+
+WINADVAPI WINAPI int      Kernel32$GetLocaleInfoEx(LPCWSTR lpLocaleName, LCTYPE LCType, LPWSTR lpLCData, int cchData);
 WINADVAPI WINAPI HANDLE   Kernel32$GetProcessHeap();
 WINADVAPI WINAPI DWORD    Kernel32$GetFileAttributesW(LPCWSTR lpFileName);
 WINADVAPI WINAPI DWORD    Kernel32$GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);\
@@ -109,6 +117,8 @@ WINADVAPI WINAPI DWORD    Kernel32$GetProcessId(HANDLE Process);
 WINADVAPI WINAPI HGLOBAL  Kernel32$GlobalAlloc(UINT uFlags, SIZE_T dwBytes);
 WINADVAPI WINAPI HGLOBAL  Kernel32$GlobalFree(HGLOBAL hMem);
 WINADVAPI WINAPI VOID     Kernel32$GetSystemInfo(LPSYSTEM_INFO lpSystemInfo);
+WINADVAPI WINAPI int      Kernel32$GetSystemDefaultLocaleName(LPWSTR lpLocaleName, int cchLocaleName);
+
 WINADVAPI WINAPI LPVOID   Kernel32$HeapAlloc(HANDLE hHeap, DWORD  dwFlags, SIZE_T dwBytes);
 WINADVAPI WINAPI BOOL     Kernel32$HeapFree(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem);
 
@@ -118,6 +128,7 @@ WINADVAPI WINAPI BOOL     Kernel32$IsWow64Process(_In_ HANDLE hProcess, _Out_ PB
 
 WINADVAPI WINAPI VOID     Kernel32$LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 WINADVAPI WINAPI HMODULE  Kernel32$LoadLibraryA(_In_ LPCSTR lpLibFileName);
+WINADVAPI WINAPI LCID     Kernel32$LocaleNameToLCID(LPCWSTR lpName, DWORD dwFlags);
 WINADVAPI WINAPI HLOCAL   Kernel32$LocalAlloc(_In_ UINT   uFlags, _In_ SIZE_T uBytes);
 WINADVAPI WINAPI HLOCAL   Kernel32$LocalFree(_In_ HLOCAL hMem);
 

@@ -21,4 +21,5 @@ Most BOFs support the `-h`/`--help`/`/?` flag to print help
 | ldapsearch | Implemented by the Sentinel scene | See Docs | Execute LDAP queries |
 | listdns | closely resembled by `dnscache` | `dnscache` | Print local storage of DNS records |
 | listmods | `list_modules` | `list_modules <PID>` | Lists all the DLLs loaded in the current process or a target process. | 
-| listpipes | Can be achieved by `ls` command  | `ls \\.\pipe\` | List named pipes | 
+| listpipes | Can be achieved by `ls` command  | `ls \\.\pipe\` | List named pipes |
+| locale | BOFF Implemented! | `locale` | List system locale language, locale ID, date, time, and country |
