@@ -28,6 +28,7 @@
 #define GetCurrentProcessId                 Kernel32$GetCurrentProcessId
 #define GetDateFormatEx                     Kernel32$GetDateFormatEx
 
+#define GetDiskFreeSpaceExA                 Kernel32$GetDiskFreeSpaceExA
 #define GetFileAttributesW                  Kernel32$GetFileAttributesW
 #define GetLocaleInfoEx                     Kernel32$GetLocaleInfoEx
 #define GetFileSize                         Kernel32$GetFileSize
@@ -41,6 +42,7 @@
 #define GlobalFree                          Kernel32$GlobalFree
 #define GetSystemInfo                       Kernel32$GetSystemInfo
 #define GetSystemDefaultLocaleName          Kernel32$GetSystemDefaultLocaleName
+#define GlobalMemoryStatusEx                Kernel32$GlobalMemoryStatusEx
 
 #define InitializeCriticalSection           Kernel32$InitializeCriticalSection
 #define IsWow64Process                      Kernel32$IsWow64Process
@@ -105,6 +107,7 @@ WINADVAPI WINAPI BOOL     Kernel32$FreeLibrary(_In_ HMODULE hLibModule);
 WINADVAPI WINAPI DWORD    Kernel32$GetCurrentProcessId();
 WINADVAPI WINAPI int      Kernel32$GetDateFormatEx(LPCWSTR lpLocaleName, DWORD dwFlags, const SYSTEMTIME *lpDate,LPCWSTR lpFormat, LPWSTR lpDateStr, int cchDate, LPCWSTR lpCalendar);
 
+WINADVAPI WINAPI BOOL     Kernel32$GetDiskFreeSpaceExA(LPCSTR lpDirectoryName, PULARGE_INTEGER lpFreeBytesAvailableToCaller, PULARGE_INTEGER lpTotalNumberOfBytes, PULARGE_INTEGER lpTotalNumberOfFreeBytes);
 WINADVAPI WINAPI int      Kernel32$GetLocaleInfoEx(LPCWSTR lpLocaleName, LCTYPE LCType, LPWSTR lpLCData, int cchData);
 WINADVAPI WINAPI HANDLE   Kernel32$GetProcessHeap();
 WINADVAPI WINAPI DWORD    Kernel32$GetFileAttributesW(LPCWSTR lpFileName);
@@ -116,6 +119,7 @@ WINADVAPI WINAPI FARPROC  Kernel32$GetProcAddress(_In_ HMODULE hModule, _In_ LPC
 WINADVAPI WINAPI DWORD    Kernel32$GetProcessId(HANDLE Process);
 WINADVAPI WINAPI HGLOBAL  Kernel32$GlobalAlloc(UINT uFlags, SIZE_T dwBytes);
 WINADVAPI WINAPI HGLOBAL  Kernel32$GlobalFree(HGLOBAL hMem);
+WINADVAPI WINAPI BOOL     Kernel32$GlobalMemoryStatusEx(LPMEMORYSTATUSEX lpBuffer);
 WINADVAPI WINAPI VOID     Kernel32$GetSystemInfo(LPSYSTEM_INFO lpSystemInfo);
 WINADVAPI WINAPI int      Kernel32$GetSystemDefaultLocaleName(LPWSTR lpLocaleName, int cchLocaleName);
 
