@@ -16,3 +16,9 @@ Most BOFs support the `-h`/`--help`/`/?` flag to print help
 | env                          | Can be achieved by `get` command               | `get env` | List process environment variables |
 | findLoadedModule             | BOFF Implemented                               | `findLoadedModule [modulepart] [opt:procnamepart]` | findLoadedModule [modulepart] [opt:procnamepart]	Find what processes *modulepart* are loaded into, optionally searching just *procnamepart* | 
 | get_password_policy          | Closely implemented by the `get_password_policy` command | `get_password_policy` |Get target server or domain's configured password policy and lockouts|
+| get_session_info | Can be achieved by using a conjection of `local_session` and `query_session` command | `local_session`; `query_session` | Get information about current user session | 
+| ipconfig | `ipstats` command | `ipstats` | Print IP interfaces |
+| ldapsearch | Implemented by the Sentinel scene | See Docs | Execute LDAP queries |
+| listdns | closely resembled by `dnscache` | `dnscache` | Print local storage of DNS records |
+| listmods | `list_modules` | `list_modules <PID>` | Lists all the DLLs loaded in the current process or a target process. | 
+| listpipes | Can be achieved by `ls` command  | `ls \\.\pipe\` | List named pipes | 
