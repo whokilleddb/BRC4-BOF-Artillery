@@ -23,3 +23,4 @@ Most BOFs support the `-h`/`--help`/`/?` flag to print help
 | listmods | `list_modules` | `list_modules <PID>` | Lists all the DLLs loaded in the current process or a target process. | 
 | listpipes | Can be achieved by `ls` command  | `ls \\.\pipe\` | List named pipes |
 | locale | BOFF Implemented! | `locale` | List system locale language, locale ID, date, time, and country |
+| resources | BOFF Implemented! | `resources` | List memory usage and available disk space on the primary hard drive |

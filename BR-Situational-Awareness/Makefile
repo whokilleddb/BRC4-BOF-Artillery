@@ -12,6 +12,7 @@ all:
 	$(MAKE) TARGET=findLoadedModule bof
 	$(MAKE) TARGET=aadjoininfo bof
 	$(MAKE) TARGET=locale bof
+	$(MAKE) TARGET=resources bof
 
 bof:
 	$(CC) $(CFLAGS) -I $(INCLUDES) -o $(TARGET).o $(SRC)/$(TARGET).c
@@ -35,6 +36,9 @@ aadjoininfo:
 
 localte:
 	$(MAKE) TARGET=locale bof
+
+resources:
+	$(MAKE) TARGET=resources bof
 
 clean:
 	@rm -rf ../bofs
