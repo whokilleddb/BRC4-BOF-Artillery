@@ -91,18 +91,15 @@ void coffee(char** argv, int argc, WCHAR** dispatch) {
         return;
     }
 
-    PRINT("[+] Issuing CreateFile() trigger\n");
-	HANDLE file = CreateFileA(".\\test.txt", GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_ENCRYPTED | FILE_FLAG_DELETE_ON_CLOSE, NULL);
-	if (file != INVALID_HANDLE_VALUE) {
-		CloseHandle(file);
-	}
+    PRINT("[+] Issuing trigger\n");
+	issue_trigger();
 
     ret = IsEfsServiceRunning();
     
     if (ret < 0) {
         PRINT("[!] Could not get status of EFS Service!\n");
     } else if (ret == 0 ) {
-        PRINT("[*] EFS service could not be started\n");
+        PRINT("[-] EFS service could not be started\n");
     } else {
         PRINT("[+] EFS service has been started!\n");
         return;
