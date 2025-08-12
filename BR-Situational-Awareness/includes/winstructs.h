@@ -1,6 +1,19 @@
 #pragma once
 #include "common.h"
 
+#ifndef __WINSTRUCTS_H__
+#define __WINSTRUCTS_H__
+
+typedef struct _RTLP_CURDIR_REF {
+    LONG   ReferenceCount;
+    HANDLE DirectoryHandle;
+} RTLP_CURDIR_REF, *PRTLP_CURDIR_REF;
+
+typedef struct _RTL_RELATIVE_NAME_U {
+    UNICODE_STRING   RelativeName;
+    HANDLE           ContainingDirectory;
+    PRTLP_CURDIR_REF CurDirRef;
+} RTL_RELATIVE_NAME_U, *PRTL_RELATIVE_NAME_U;
 
 // PEB defined by rewolf
 // http://blog.rewolf.pl/blog/?p=573
@@ -544,16 +557,4 @@ typedef struct _EVENT_DESCRIPTOR {
     ULONGLONG Keyword;
 } EVENT_DESCRIPTOR, *PEVENT_DESCRIPTOR;
 
-// typedef struct _EVENT_DATA_DESCRIPTOR {
-//     ULONGLONG Ptr;
-//     ULONG     Size;
-//     union {
-//       ULONG Reserved;
-//       struct {
-//         UCHAR  Type;
-//         UCHAR  Reserved1;
-//         USHORT Reserved2;
-//       } DUMMYSTRUCTNAME;
-//     } DUMMYUNIONNAME;
-//   } EVENT_DATA_DESCRIPTOR, *PEVENT_DATA_DESCRIPTOR;
-  
+#endif

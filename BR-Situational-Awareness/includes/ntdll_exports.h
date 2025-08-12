@@ -5,9 +5,23 @@
 #define 	NT_SUCCESS(Status)   (((NTSTATUS)(Status)) >= 0)
 #endif
 
+#define OBJ_CASE_INSENSITIVE                0x00000040L
+
 #define NtQueryInformationProcess           Ntdll$NtQueryInformationProcess
 #define NtCreateFile                        Ntdll$NtCreateFile
 #define NtClose                             Ntdll$NtClose
+#define RtlDosPathNameToNtPathName_U        Ntdll$RtlDosPathNameToNtPathName_U
+
+#ifndef InitializeObjectAttributes
+#define InitializeObjectAttributes(p, n, a, r, s) { \
+    (p)->Length = sizeof(OBJECT_ATTRIBUTES); \
+    (p)->RootDirectory = r; \
+    (p)->Attributes = a; \
+    (p)->ObjectName = n; \
+    (p)->SecurityDescriptor = s; \
+    (p)->SecurityQualityOfService = NULL; \
+    }
+#endif
 
 // NT Function headers
 __declspec(dllimport) __stdcall NTSTATUS Ntdll$NtOpenProcessToken(HANDLE ProcessHandle, ACCESS_MASK DesiredAccess, PHANDLE TokenHandle);
@@ -30,5 +44,8 @@ __declspec(dllimport) __stdcall NTSTATUS Ntdll$NtCreateFile(PHANDLE FileHandle, 
 typedef struct in6_addr in6_addr;
 __declspec(dllimport) __stdcall ULONG    Ntdll$EtwEventWriteNoRegistration(GUID const* ProviderId, EVENT_DESCRIPTOR const* EventDescriptor, ULONG UserDataCount, EVENT_DATA_DESCRIPTOR* UserData);
 __declspec(dllimport) PSTR Ntdll$RtlIpv6AddressToStringA(const in6_addr *Addr, PSTR S);
+
+__declspec(dllimport) __stdcall BOOLEAN     Ntdll$RtlDosPathNameToNtPathName_U(IN PCWSTR DosName,OUT PUNICODE_STRING NtName, OUT PCWSTR *PartName, OUT PRTL_RELATIVE_NAME_U RelativeName);
+
 
 // __declspec(dllimport) __stdcall  VOID Ntdll$EventDescCreate(PEVENT_DESCRIPTOR EventDescriptor, USHORT  Id, UCHAR   Version, UCHAR   Channel, UCHAR   Level, USHORT  Task, UCHAR Opcode, ULONGLONG Keyword);
