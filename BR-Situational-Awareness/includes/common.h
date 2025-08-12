@@ -21,6 +21,8 @@
 #include <ntsecapi.h>
 #include <evntprov.h>
 #include <wincrypt.h>
+#include <netfw.h>
+#include <comutil.h>
 
 #include "badger_exports.h"
 #include "lmjoin_exports.h"
@@ -35,3 +37,4 @@
 #include "version_exports.h"
 #include "imagehlp_exports.h"
 #include "crypt32_exports.h"
+#include "ole32_exports.h"
